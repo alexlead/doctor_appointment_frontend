@@ -1,10 +1,160 @@
+@use "sass:map";
+
+$theme-colors: ("white": #ffffff,
+    "light-grey": #dfdfdf,
+    "grey": #cccccc,
+    "light": #dadbf7,
+    "dark": #182135,
+    "primary": #039BF1,
+    "secondary": #bb5b1c,
+    "info": #726b91,
+    "success": #139a5f,
+    "warning": #dcca14,
+    "danger": #FF0505,
+);
+
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-daterangepicker/daterangepicker.css';
+
+.btn {
+    border-radius: 20px;
+}
+
+.btn-primary,
+.btn-danger {
+    color: map.get($theme-colors, "white");
+    font-weight: bold;
+}
 
 .app-logo {
-    width: 136px;
+    width: 100px;
     height: auto;
 
-    &.dialog{
+    &.dialog {
         width: 58px;
-        
+
+    }
+}
+
+
+.nav-item {
+    a {
+        text-decoration: none;
+    }
+}
+
+.timeslot-radio {
+
+
+
+    label {
+
+        display: inline-block;
+        padding: 10px 15px;
+        margin: 10px 10px;
+        border-radius: 10px;
+        border: 2px solid map.get($theme-colors, "primary");
+
+        &:hover {
+
+            background: map.get($theme-colors, "danger");
+            color: map.get($theme-colors, "white");
+            border-color: transparent;
+        }
+
+
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+    input[type="radio"]:checked+label {
+        background: map.get($theme-colors, "danger");
+        color: map.get($theme-colors, "white");
+        border-color: transparent;
+
+
+    }
+
+    input[disabled]+label {
+        border: 2px solid map.get($theme-colors, "info");
+    }
+
+
+}
+
+
+.appcard {
+
+    display: inline-block;
+    padding: 15px 20px;
+    border-radius: 10px;
+    background: map.get($theme-colors, "grey");
+    width: 338px;
+
+    &__header {
+        display: flex;
+
+        &__slot_id {
+            min-width: 100px;
         }
     }
+
+    &__body {
+        display: flex;
+        justify-content: space-between;
+
+
+        .btn {
+            border-radius: 10px;
+        }
+
+        .slot {
+
+            font-size: 20px;
+            font-weight: bold;
+        }
+    }
+
+    &__footer {
+        &__line {
+            display: block;
+            height: 3px;
+            border-radius: 2px;
+            background: map.get($theme-colors, "dark");
+        }
+    }
+}
+
+.prevappcard {
+
+    display: inline-block;
+    padding: 15px 20px;
+    border-radius: 10px;
+    background: map.get($theme-colors, "light-grey");
+    width: 338px;
+
+        &__header {
+        display: flex;
+justify-content: space-between;
+        &__is_visited {
+            padding: 2px 8px;
+            display: inline-block;
+            background: map.get($theme-colors, "grey");
+            border-radius: 5px;
+        }
+
+    }
+
+            &__body {
+
+                text-align: center;
+            }
+
+   &__footer {
+      
+                text-align: right;
+      
+    }
+}

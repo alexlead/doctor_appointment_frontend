@@ -9,17 +9,17 @@ import RegistrationFormLaunch from './RegistrationFormLaunch';
 
 const HomeHeader = () => {
   return (
-    <div className="navbar navbar-expand-lg sticky-top bg-body-tertiary">
+    <div className="navbar navbar-expand-lg p-0">
 
       <div className="container">
 
-        <Navbar bg="light" data-bs-theme="light">
+        <Navbar className='p-0 navbar-collapse collapse' >
           <Container>
             <Navbar.Brand href="/"><img src={logo} className='app-logo' alt="Doctor Appointment App" /></Navbar.Brand>
 
             <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="justify-content-end flex-grow-1 pe-3">
-    
+              <Nav className="justify-content-end flex-grow-1 pe-3">
+
                 <LoginFormLaunch />
                 <RegistrationFormLaunch />
               </Nav>
