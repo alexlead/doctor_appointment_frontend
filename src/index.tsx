@@ -1,13 +1,18 @@
+// import './custom.scss'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter, HashRouter } from "react-router-dom";
 import App from './App';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './app.scss'
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import {  far } from '@fortawesome/free-regular-svg-icons'
+import './app.scss'
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+
 
 import reportWebVitals from './reportWebVitals';
 
@@ -20,7 +25,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
 

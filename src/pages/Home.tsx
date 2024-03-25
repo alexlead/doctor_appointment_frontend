@@ -7,9 +7,9 @@ const Home = () => {
   return (
     <div>
 
-        <HomeHeader/>
-    
-    
+      <HomeHeader />
+
+
     </div>
   );
 };

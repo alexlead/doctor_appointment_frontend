@@ -1,24 +1,24 @@
-import  React, {useState} from 'react';
-import Button from 'react-bootstrap/Button';
+import React, { useState } from 'react';
+
 import LoginWindow from './LoginWindow';
 interface ILoginFormLaunchProps {
 }
 
-const LoginFormLaunch: React.FunctionComponent<ILoginFormLaunchProps> = (props) => {
+const LoginFormLaunch: React.FunctionComponent<ILoginFormLaunchProps> = () => {
     const [modalShow, setModalShow] = useState(false);
 
-    const hideModal = () => {
+    const hideModalLogin = () => {
         setModalShow(false)
     }
-  return (
-    <>
-    <Button variant="outline-dark" onClick={() => setModalShow(true)}>
-        Sign In
-    </Button>
+    return (
+        <>
+            <div className="p-3 text-danger" onClick={() => setModalShow(true)} style={{ "cursor": "pointer" }}>
+                <strong>Sign In</strong>
+            </div>
 
-    <LoginWindow show={modalShow} onHide={hideModal} />
-    </>
-  );
+            <LoginWindow show={modalShow} onHideLogin={hideModalLogin} />
+        </>
+    );
 };
 
 export default LoginFormLaunch;

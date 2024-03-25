@@ -1,11 +1,25 @@
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
-
+import './app.scss'
+import Dashboard from './pages/Dashboard';
+import DashboardCommingAppointments from './view/DashboardCommingAppointments';
+import DashboardAllAppointments from './view/DashboardAllAppointments';
+import DashboardEditAppointment from './view/DashboardEditAppointment';
+import DashboardProfile from './view/DashboardProfile';
 
 function App() {
   return (
     <div className="App">
-        <Home />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/dashboard' element={<Dashboard />} >
+          <Route path='' element={<DashboardCommingAppointments />} />
+          <Route path='myappointments' element={<DashboardAllAppointments />} />
+          <Route path='editappointment' element={<DashboardEditAppointment />} />
+          <Route path='profile' element={<DashboardProfile />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
