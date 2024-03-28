@@ -157,4 +157,34 @@ justify-content: space-between;
                 text-align: right;
       
     }
+    
+}
+
+.appcard-banner {
+    background-image: url('assets/images/banner.png'); 
+    background-size: cover; 
+    background-position: center; 
+    height: 500px; 
+    border-radius: 10px; 
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    padding: 20px; 
+    color: white; 
+    font-size: 24px; 
+    font-weight: bold; 
+}
+
+.banner-content {
+    margin-top: auto; 
+    text-align: center; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+}
+
+.appcard-banner .btn {
+    margin-top: 20px; 
+    background-color: map.get($theme-colors, "danger"); 
+    color: white; 
+    align-self: flex-start; 
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
 }
