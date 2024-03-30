@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../../api/authenticate";
+
 
 
 type State = {
-  user: undefined | User;
+  user: undefined ;
   permissions: undefined | string[];
   loading: boolean;
 };
@@ -20,7 +20,7 @@ export const userSlice = createSlice({
     authenticateAction: (state) => {
       state.loading = true;
     },
-    authenticatedAction: (state, action: PayloadAction<User | undefined>) => {
+    authenticatedAction: (state, action: PayloadAction< undefined>) => {
       state.user = action.payload;
       state.loading = false;
     },

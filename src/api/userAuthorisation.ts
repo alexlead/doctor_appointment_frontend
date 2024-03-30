@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 export type userAuthResponse = {
     status: string;
@@ -26,22 +26,23 @@ export type userRegistrationForm = {
 }
 
 
-export async function userLogin ( credentials: userLoginForm ): Promise<userAuthResponse | null > {
+export async function userLogin ( credentials: userLoginForm ) {
     
   try{
 
-    const response: userAuthResponse  = await axios.post("/api/user/authorisation", credentials).then((data: any)=>JSON.parse(data));
-    
-    console.log( response )
-    return null;
+    const request = await axios.post("/api/user/authorisation", credentials);
+    const response = await request.data;
+
+    // console.log( response.data )
+    return response;
   } catch (e: AxiosError | any){
-    console.log("Error: ", e?.message);
+    console.log("Error: ", e?.message );
 
     const status =  e?.response?.status;
     const message = e?.message
     // console.log
 
-    return null;
+    return {status, message};
   }
 
     // const response = await axios.post("/api/user/authorisation", credentials).then(data=>console.log(data)).catch(error=>console.log(error));

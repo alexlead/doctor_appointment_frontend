@@ -34,7 +34,7 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
             password: values.password
         }
 
-       console.log( userLogin( credentials ) );
+       console.log( userLogin( credentials ) ) ;
         
 
         // dispatch(closeModal())
