@@ -7,7 +7,7 @@ export type doctor = {
 export async function getDoctors () {
 
   return await fetch(
-    `/api/user/doctors`,
+    `/api/users/doctors`,
     {
       method: "GET",
       headers: {

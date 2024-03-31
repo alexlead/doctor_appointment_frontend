@@ -1,11 +1,14 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import * as formik from 'formik';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '../store/slices/modalSlice';
-import { userLogin, userLoginForm } from '../api/userAuthorisation';
+import { decodedUser, userAuthResponse, userLogin, userLoginForm } from '../api/userAuthorisation';
+import { authenticatedAction, authorizedAction } from '../store/slices/userSlice';
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
 
 interface ILoginFormProps {
 }
@@ -25,6 +28,37 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
     });
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const [auth, setAuth] = useState< userAuthResponse | null>(null)
+
+    async function tryLogin ( credentials: userLoginForm ) {
+        try {
+            const res = await userLogin( credentials )
+            const data = await res.json();
+            console.log(res.status);
+            console.log(data);
+            
+            if ( res.status == 200 ) {
+
+                localStorage.setItem('token', data.refreshToken);
+                localStorage.setItem('accessToken', data.accessToken);
+
+
+                const user:decodedUser = jwtDecode( data.accessToken );
+                console.log(user)
+
+                dispatch(authenticatedAction( data.accessToken ))
+                dispatch(authorizedAction( user.roles[0].authority ))
+                navigate("/dashboard")
+                setAuth(data)
+                
+            }
+          } catch (error) {
+            console.log(error);
+          }
+    }
+
 
     const handleSubmitForm = (values: loginValues) => {
         console.log(values)
@@ -34,10 +68,9 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
             password: values.password
         }
 
-       console.log( userLogin( credentials ) ) ;
-        
+       tryLogin( credentials ) ;
 
-        // dispatch(closeModal())
+        dispatch(closeModal())
     }
 
     return (

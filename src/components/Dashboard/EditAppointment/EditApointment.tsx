@@ -61,14 +61,35 @@ const getDoctorsSlots = async ( freeSlotRequest: TFreeSlotRequest ) => {
   }
 }
 
-  const handleSelectedDoctor = ( values: any, e: any) => {
-  
-    const freeSlotRequest: TFreeSlotRequest = {
-      date: values.date,
-      doctorId: values.doctorId
-    }
-    getDoctorsSlots(freeSlotRequest);
 
+  const handleChangedDate = (values: any , event: any) => {
+    if( values.doctorId > 0 ) {
+
+      const freeSlotRequest: TFreeSlotRequest = {
+        date: event.target.value,
+        doctorId: values.doctorId
+      }
+      
+        updateSlots( freeSlotRequest );
+    }
+
+  }
+
+  const handleSelectedDoctor = ( values: any, event: any) => {
+  
+     const freeSlotRequest: TFreeSlotRequest = {
+        date: values.appointmentDate,
+        doctorId: event.target.value
+      }
+
+      updateSlots( freeSlotRequest );
+    
+  }
+
+
+  function updateSlots ( freeSlotRequest: TFreeSlotRequest ): void {
+      console.log(freeSlotRequest);
+      getDoctorsSlots(freeSlotRequest);
   }
 
   const handleSubmitForm = (values: IAppointmentValues) => {
@@ -85,7 +106,7 @@ const getDoctorsSlots = async ( freeSlotRequest: TFreeSlotRequest ) => {
       onSubmit={values => handleSubmitForm(values)}
       initialValues={{
         appointmentDate: minDate,
-        doctorId: 0,
+        doctorId: 4,
         timeslots: 0
       }}
     >
@@ -100,13 +121,20 @@ const getDoctorsSlots = async ( freeSlotRequest: TFreeSlotRequest ) => {
             min={minDate}
             max={maxDate}
             value={values.appointmentDate}
-            onChange={handleChange}
+            onChange={(e)=>{handleChange(e); handleChangedDate(values, e)}}
+            // onChange={handleChange}
             placeholder="Date of Appointment" />
           <h3 className='text-dark my-4'>Doctor:</h3>
-          <Form.Select aria-label="Default select example" name="doctorId" onChange={(e)=>{handleChange(e); handleSelectedDoctor(values, e)}}>
+          <Form.Select aria-label="Default select example" 
+            name="doctorId" 
+            value={values.doctorId}
+            onChange={(e)=>{handleChange(e); handleSelectedDoctor(values, e)}}>
             <option>Select Doctor for visit</option>
             {
-              doctors?.map(doctor => <option value={doctor.id} key={doctor.id}>Dr. {doctor.name} {doctor.surname} </option>)
+              doctors?.map(doctor => <option 
+                value={doctor.id} 
+                key={doctor.id}
+              >Dr. {doctor.name} {doctor.surname} </option>)
             }
           </Form.Select>
 
@@ -118,6 +146,7 @@ const getDoctorsSlots = async ( freeSlotRequest: TFreeSlotRequest ) => {
             { doctorsSlots?.map(slot=>
             
                         <Form.Check
+                          key={slot.id}
                           inline
                           disabled={false}
                           label={`${slot.startTime} - ${slot.endTime}`}

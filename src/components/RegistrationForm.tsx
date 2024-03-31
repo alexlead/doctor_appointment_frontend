@@ -43,7 +43,7 @@ const RegistrationForm: React.FunctionComponent<IRegistrationFormProps> = () => 
         userRegistration( credentials );
 
         
-        // dispatch(closeModal())
+        dispatch(closeModal())
     }
 
 
