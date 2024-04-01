@@ -1,17 +1,33 @@
-import * as React from 'react';
+import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import logo from '../assets/images/logo.png'
 import patient from '../assets/images/patientvisit.png'
 import RegistrationForm from './RegistrationForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeModal, openModal, selectModal } from '../store/slices/modalSlice';
 
 interface IRegistrationWindowProps {
-    show: boolean;
-    onHide: () => void;
+
 }
 
-const RegistrationWindow: React.FunctionComponent<IRegistrationWindowProps> = ({ show, onHide }) => {
+const RegistrationWindow: React.FunctionComponent<IRegistrationWindowProps> = (props) => {
+
+
+    const registrationWindowStatus = useSelector(selectModal).modal === "registration";
+
+    const dispatch = useDispatch();
+
+    const hideRegistrationWindow = () => {
+        dispatch(closeModal());
+    }
+
+    const openLoginWindow = () => {
+        dispatch(openModal("login"));
+    }
+
+
     return (
-        <Modal show={show} onHide={onHide} size="xl" aria-labelledby="contained-modal-title-vcenter">
+        <Modal show={registrationWindowStatus} onHide={hideRegistrationWindow} size="xl" aria-labelledby="contained-modal-title-vcenter">
             <Modal.Header closeButton>
                 <img src={logo} className='app-logo dialog' alt="Doctor Appointment App" />
             </Modal.Header>
@@ -34,7 +50,7 @@ const RegistrationWindow: React.FunctionComponent<IRegistrationWindowProps> = ({
                             <p className="text-primary">It’s free and easy</p>
                             <RegistrationForm />
 
-                            <p className='text-center my-4'>Already have an account? <span className="text-danger" >Sign In</span></p>
+                            <p className='text-center my-4'>Already have an account? <span className="text-danger" style={{ "cursor": "pointer" }} onClick={openLoginWindow}>Sign In</span></p>
                         </div>
 
                     </div>

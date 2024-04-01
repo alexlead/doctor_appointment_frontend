@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import RegistrationWindow from './RegistrationWindow';
+import { useDispatch } from 'react-redux';
+import { openModal } from '../store/slices/modalSlice';
 interface IRegistrationFormLaunchProps {
 }
 
 const RegistrationFormLaunch: React.FunctionComponent<IRegistrationFormLaunchProps> = () => {
-    const [modalShow, setModalShow] = useState(false);
 
-    const hideModal = () => {
-        setModalShow(false)
+    
+    const dispatch = useDispatch();
+
+    const setModalLoginShow = () => {
+        dispatch(openModal("registration"))
     }
+
+
     return (
         <>
-            <div className="p-3 text-danger" onClick={() => setModalShow(true)} style={{ "cursor": "pointer" }}>
+            <div className="p-3 text-danger" onClick={setModalLoginShow} style={{ "cursor": "pointer" }}>
                 <strong>Sign Up</strong>
             </div>
 
-            <RegistrationWindow show={modalShow} onHide={hideModal} />
 
         </>
     );

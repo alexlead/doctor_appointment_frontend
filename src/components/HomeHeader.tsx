@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -6,10 +6,14 @@ import Navbar from 'react-bootstrap/Navbar';
 import logo from '../assets/images/logo.png'
 import LoginFormLaunch from './LoginFormLaunch';
 import RegistrationFormLaunch from './RegistrationFormLaunch';
+import LoginWindow from './LoginWindow';
+import RegistrationWindow from './RegistrationWindow';
 
 const HomeHeader = () => {
   return (
     <div className="navbar navbar-expand-lg p-0">
+    <LoginWindow/>
+    <RegistrationWindow />
 
       <div className="container">
 

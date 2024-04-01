@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from 'react-bootstrap';
 
-import LoginWindow from '../LoginWindow';
+import { useDispatch } from 'react-redux';
+import { openModal } from '../../store/slices/modalSlice';
 const Banner = () => {
-  const [modalShow, setModalShow] = useState(false);
+  
+
+  const dispatch = useDispatch();
 
   const showModalLogin = () => {
-    setModalShow(true);
-  };
+      dispatch(openModal("login"))
+  }
+
+
 
   return (
     <div className="appcard-banner">
@@ -16,7 +21,7 @@ const Banner = () => {
         <p>Our specialists are ready to help. Contact us now.</p>
         <Button variant="primary" onClick={showModalLogin}>Sign In</Button>
       </div>
-      <LoginWindow show={modalShow} onHideLogin={() => setModalShow(false)} />
+  
     </div>
   );
 };

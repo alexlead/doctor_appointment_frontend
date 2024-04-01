@@ -7,8 +7,14 @@ import DashboardCommingAppointments from './view/DashboardCommingAppointments';
 import DashboardAllAppointments from './view/DashboardAllAppointments';
 import DashboardEditAppointment from './view/DashboardEditAppointment';
 import DashboardProfile from './view/DashboardProfile';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from './store/slices/userSlice';
 
 function App() {
+
+
+
+
   return (
     <div className="App">
       <Routes>

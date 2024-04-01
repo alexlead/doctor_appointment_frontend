@@ -1,18 +1,30 @@
-import * as React from 'react';
-import Button from 'react-bootstrap/Button';
+import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import logo from '../assets/images/logo.png'
 import LoginForm from './LoginForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeModal, openModal, selectModal } from '../store/slices/modalSlice';
 
 interface ILoginWindowProps {
-    show: boolean;
-    onHideLogin: () => void;
-
 }
 
-const LoginWindow: React.FunctionComponent<ILoginWindowProps> = ({ show, onHideLogin }) => {
+const LoginWindow: React.FunctionComponent<ILoginWindowProps> = (props) => {
+
+    const loginWindowStatus = useSelector(selectModal).modal === "login";
+
+    const dispatch = useDispatch();
+
+    const hideLoginWindow = () => {
+        dispatch(closeModal());
+    }
+
+    const openRegistrationWindow = () => {
+        dispatch(openModal("registration"));
+    }
+
+
     return (
-        <Modal show={show} onHide={onHideLogin} size="xl" aria-labelledby="contained-modal-title-vcenter">
+        <Modal show={loginWindowStatus} onHide={hideLoginWindow} size="xl" aria-labelledby="contained-modal-title-vcenter">
 
             <Modal.Header closeButton>
                 <img src={logo} className='app-logo dialog' alt="Doctor Appointment App" />
@@ -34,7 +46,7 @@ const LoginWindow: React.FunctionComponent<ILoginWindowProps> = ({ show, onHideL
                             <h2 className="text-primary  my-3">Welcome back!</h2>
                             <LoginForm />
 
-                            <p className='text-center my-4'>Don’t have an account? <span className="text-danger" >Sign Up</span></p>
+                            <p className='text-center my-4'>Don’t have an account? <span className="text-danger" style={{ "cursor": "pointer" }} onClick={openRegistrationWindow}>Sign Up</span></p>
                         </div>
 
                     </div>
