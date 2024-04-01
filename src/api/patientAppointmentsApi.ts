@@ -1,3 +1,4 @@
+import { getRequestHeader } from "./accessToken";
 
 export type TFreeSlotRequest = {
     date: string;
@@ -10,25 +11,41 @@ export type slot = {
         endTime: string;
 }
 
+
 export type TPatientAppointment = {
     id: number;
     date: string;
     doctorId: number;
     slotId: number;
 }
+
+export type TDetailedAppointment =   {
+  id: number,
+  doctorId: {
+    id: number,
+    name: string,
+    surname: string
+  },
+  slotId: {
+    id: number,
+    startTime: string,
+    endTime: string
+  },
+  date: string,
+  visitComplete: boolean
+}
+
+
+export const requestHeader = getRequestHeader();
 export async function getFreeSlots (freeSlotRequest: TFreeSlotRequest) {
 
+
     return await fetch(
-        `/api/slot/free`,
+        `/api/slots/${freeSlotRequest.date}/${freeSlotRequest.doctorId}`,
         {
-          method: "POST",
-          headers: {
-            'Content-type': 'application/json'
-          },
-    
-          body: JSON.stringify(
-            freeSlotRequest
-        )
+          method: "GET",
+          headers: requestHeader,
+  
         }
       );
 
@@ -37,4 +54,57 @@ export async function getFreeSlots (freeSlotRequest: TFreeSlotRequest) {
 // todo : need backend appointment
 export async function savePatientAppointment ( appointment: TPatientAppointment) {
 
+}
+
+// todo: appointment without id
+export async function getPatientFutureAppointment () {
+  
+  return await fetch(
+    `/api/appointments/patient/future/2`,
+    {
+      method: "GET",
+      headers: requestHeader,
+
+    }
+  );
+}
+
+// todo: appointment without id
+export async function getPatientPastAppointment () {
+
+  return await fetch(
+    `/api/appointments/patient/past/2`,
+    {
+      method: "GET",
+      headers: requestHeader,
+
+    }
+    );
+}
+
+
+export async function getPatientAppointmentByPeriod ( startPeriod: string = "", endPeriod: string = ""  ) {
+
+
+  const today = new Date();
+  today.setMonth(today.getMonth() - 1 );
+  let startDate = today.toISOString().slice(0, 10);
+  today.setMonth(today.getMonth() + 2);
+  let endDate = today.toISOString().slice(0, 10);
+
+  if ( startPeriod.length === 10) {
+    startDate = startPeriod; 
+  }
+  if ( endPeriod.length === 10) {
+    endDate = endPeriod; 
+  }
+
+  return await fetch(
+    `/api/appointments/patient/2/${startDate}/${endDate}`,
+    {
+      method: "GET",
+      headers: requestHeader,
+
+    }
+    );
 }

@@ -2,32 +2,40 @@ import { faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
+import { TDetailedAppointment } from '../../api/patientAppointmentsApi';
+import { Link } from 'react-router-dom';
 
 interface IPreviousAppointmentCardProps {
+  appointment: TDetailedAppointment
 }
 
-const PreviousAppointmentCard: React.FunctionComponent<IPreviousAppointmentCardProps> = (props) => {
-  return (
-<div className='prevappcard my-2 mx-3'>
+const PreviousAppointmentCard: React.FunctionComponent<IPreviousAppointmentCardProps> = ({ appointment }) => {
 
-    <div className="prevappcard__header">
-      <div className="prevappcard__header__app_id">Appointment #123</div>
-      <div className="prevappcard__header__is_visited">visited</div>
-    </div>
-    <div className="prevappcard__body my-3">
-      <div className="prevappcard__body__details">
-        <div className="date">Tue, 27 of Feb, 2024</div>
-        <div className="slot"><FontAwesomeIcon icon={faClock} /> 10:00 - 10:30</div>
+  const appointmentDate = new Date(appointment.date).toDateString();
+
+  return (
+    <div className='prevappcard my-2 mx-3'>
+
+      <div className="prevappcard__header">
+        <div className="prevappcard__header__app_id">Appointment #{appointment.id}</div>
+        <div className="prevappcard__header__is_visited">finished</div>
       </div>
-      <div className="prevappcard__body__doctor my-2">visit Dr. Jogan Schtefan</div>
+      <div className="prevappcard__body my-3">
+        <div className="prevappcard__body__details">
+          <div className="date">{appointmentDate}</div>
+          <div className="slot"><FontAwesomeIcon icon={faClock} /> {appointment.slotId.startTime} - {appointment.slotId.endTime}</div>
+        </div>
+        <div className="prevappcard__body__doctor my-2">visit Dr. {appointment.doctorId.name} {appointment.doctorId.surname}</div>
+      </div>
+      <div className="prevappcard__footer">
+        <Link to="/dashboard/editappointment" state={{ id: appointment.id }} >
+          <Button className=' mx-1' variant="primary" type="button">
+            View
+          </Button>
+        </Link>
+      </div>
     </div>
-    <div className="prevappcard__footer">
-      <Button className=' mx-1' variant="primary" type="button">
-                View
-              </Button>
-    </div>
-</div>
-  ) ;
+  );
 };
 
 export default PreviousAppointmentCard;

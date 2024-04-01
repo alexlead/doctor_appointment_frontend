@@ -1,12 +1,14 @@
 import * as React from 'react';
 import Pagination from 'react-bootstrap/Pagination';
 interface IMyAppointmentsPaginationProps {
+  total: number;
+
 }
 
-const MyAppointmentsPagination: React.FunctionComponent<IMyAppointmentsPaginationProps> = (props) => {
-  let active = 2;
+const MyAppointmentsPagination: React.FunctionComponent<IMyAppointmentsPaginationProps> = ({total}) => {
+  let active = 1;
 let items = [];
-for (let number = 1; number <= 5; number++) {
+for (let number = 1; number <= total; number++) {
   items.push(
     <Pagination.Item key={number} active={number === active}>
       {number}
