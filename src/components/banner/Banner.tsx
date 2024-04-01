@@ -18,7 +18,7 @@ const Banner = () => {
     <div className="appcard-banner">
       <div className="banner-content">
         <h2>Welcome to House Care Center - Your Home for Family Wellness!</h2>
-        <p>Our specialists are ready to help. Contact us now.</p>
+        <p>Our specialists are ready to help. Contact us now</p>
         <Button variant="primary" onClick={showModalLogin}>Sign In</Button>
       </div>
   
