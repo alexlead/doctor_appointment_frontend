@@ -42,7 +42,7 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
   const maxDate = today.toISOString().slice(0, 10);
 
   const [doctors, setDoctors] = useState<doctor[] | null>(null);
-  const [doctorsSlots, setDodctorsSlots] = useState<slot[] | null>(null);
+  const [doctorsSlots, setDodctorsSlots] = useState<TFreeSlotRequest | null>(null);
 
   const getDoctorsList = async () => {
     try {

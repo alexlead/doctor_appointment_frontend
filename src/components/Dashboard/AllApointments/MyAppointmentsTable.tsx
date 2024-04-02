@@ -9,8 +9,7 @@ interface IMyAppointmentsTableProps {
 
 const MyAppointmentsTable: React.FunctionComponent<IMyAppointmentsTableProps> = ({appointments}) => {
 
-
-
+  const today = Date.now();
   return (
     <div className="">
 
@@ -40,9 +39,13 @@ const MyAppointmentsTable: React.FunctionComponent<IMyAppointmentsTableProps> = 
                 View
               </Button>
             </Link>
+
+            { Date.parse(appointment.date) > today &&  
+           
               <Button className=' mx-1 my-2' variant="danger" type="button">
                 Cancel
               </Button>
+              }
 
             </td>
           </tr>

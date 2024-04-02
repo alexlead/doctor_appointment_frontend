@@ -35,6 +35,10 @@ export type TDetailedAppointment =   {
   visitComplete: boolean
 }
 
+export type TFreeSlotsByDate = {
+  all : slot[];
+  free: slot[];
+}
 
 export const requestHeader = getRequestHeader();
 export async function getFreeSlots (freeSlotRequest: TFreeSlotRequest) {
