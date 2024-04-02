@@ -1,5 +1,3 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-
 export type userAuthResponse = {
   accessToken: string;
   refreshToken: string;

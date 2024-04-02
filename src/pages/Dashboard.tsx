@@ -11,18 +11,8 @@ interface IDashboardProps {
 
 const Dashboard: React.FunctionComponent<IDashboardProps> = (props) => {
 
-    
-  const {accessToken, permissions} = useSelector(selectUser);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-
-
     return (
         <div className="container-fluid">
-
-{ accessToken !== null ? (
 
     <div className="row flex-nowrap">
                 <DashboardSidebar/>
@@ -34,13 +24,7 @@ const Dashboard: React.FunctionComponent<IDashboardProps> = (props) => {
                     </div>
                 </div>
             </div>
-                ) : (
-<div>
 
-Access Denied!
-
-</div>
-                )}
 </div>
     );
 };

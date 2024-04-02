@@ -5,8 +5,11 @@ import * as formik from 'formik';
 
 import * as yup from 'yup';
 import { getFreeSlots, slot, TFreeSlotRequest } from '../../../api/patientAppointmentsApi';
+import { Link, useLocation } from 'react-router-dom';
 
 interface IEditAppointmentProps {
+
+
 }
 
 interface IAppointmentValues {
@@ -15,10 +18,17 @@ interface IAppointmentValues {
   timeslots: number;
 }
 
-const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = () => {
+
+
+const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) => {
+
+  const { state } = useLocation();
+
+  console.log(state)
+
   const { Formik } = formik;
 
- 
+
   const schema = yup.object().shape({
     appointmentDate: yup.string().required(),
     doctorId: yup.number().required(),
@@ -32,12 +42,13 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = () => {
   const maxDate = today.toISOString().slice(0, 10);
 
   const [doctors, setDoctors] = useState<doctor[] | null>(null);
-  const [doctorsSlots, setDodctorsSlots] = useState<slot[] | null>(null);
+  const [doctorsSlots, setDodctorsSlots] = useState<TFreeSlotRequest | null>(null);
 
   const getDoctorsList = async () => {
     try {
       const res = await getDoctors();
       const data = await res.json();
+      console.log("doctors: ", data)
       setDoctors(data);
     } catch (error) {
       console.log(error);
@@ -46,57 +57,54 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = () => {
 
   useEffect(() => {
 
-    if(doctors === null ) {
+    if (doctors === null) {
       getDoctorsList();
     }
   }, []);
 
-const getDoctorsSlots = async ( freeSlotRequest: TFreeSlotRequest ) => {
-  try {
-    const res = await getFreeSlots(freeSlotRequest);
-    const data = await res.json();
-    setDodctorsSlots(data);
-  } catch (error) {
-    console.log(error);
+  const getDoctorsSlots = async (freeSlotRequest: TFreeSlotRequest) => {
+    try {
+      const res = await getFreeSlots(freeSlotRequest);
+      const data = await res.json();
+      setDodctorsSlots(data);
+    } catch (error) {
+      console.log(error);
+    }
   }
-}
 
 
-  const handleChangedDate = (values: any , event: any) => {
-    if( values.doctorId > 0 ) {
+  const handleChangedDate = (values: any, event: any) => {
+    if (values.doctorId > 0) {
 
       const freeSlotRequest: TFreeSlotRequest = {
         date: event.target.value,
         doctorId: values.doctorId
       }
-      
-        updateSlots( freeSlotRequest );
+
+      updateSlots(freeSlotRequest);
     }
 
   }
 
-  const handleSelectedDoctor = ( values: any, event: any) => {
-  
-     const freeSlotRequest: TFreeSlotRequest = {
-        date: values.appointmentDate,
-        doctorId: event.target.value
-      }
+  const handleSelectedDoctor = (values: any, event: any) => {
 
-      updateSlots( freeSlotRequest );
-    
+    const freeSlotRequest: TFreeSlotRequest = {
+      date: values.appointmentDate,
+      doctorId: event.target.value
+    }
+
+    updateSlots(freeSlotRequest);
+
   }
 
-
-  function updateSlots ( freeSlotRequest: TFreeSlotRequest ): void {
-      console.log(freeSlotRequest);
-      getDoctorsSlots(freeSlotRequest);
+  function updateSlots(freeSlotRequest: TFreeSlotRequest): void {
+    console.log(freeSlotRequest);
+    getDoctorsSlots(freeSlotRequest);
   }
 
   const handleSubmitForm = (values: IAppointmentValues) => {
     console.log(values);
   }
-
-
 
   return (
 
@@ -113,7 +121,14 @@ const getDoctorsSlots = async ( freeSlotRequest: TFreeSlotRequest ) => {
       {({ handleSubmit, handleChange, values, touched, errors }) => (
         <Form noValidate onSubmit={handleSubmit}>
 
-          <h1 className='text-primary my-4'>New Appointment</h1>
+          {state.id === 0 ? (
+            <h1 className='text-primary my-4'>New Appointment</h1>
+          ) : (
+            <h1 className='text-primary my-4'>Appointment #{state.id}</h1>
+          )}
+
+
+
           <h3 className='text-dark my-4'>Date:</h3>
           <Form.Control
             type="date"
@@ -121,29 +136,30 @@ const getDoctorsSlots = async ( freeSlotRequest: TFreeSlotRequest ) => {
             min={minDate}
             max={maxDate}
             value={values.appointmentDate}
-            onChange={(e)=>{handleChange(e); handleChangedDate(values, e)}}
+            onChange={(e) => { handleChange(e); handleChangedDate(values, e) }}
             // onChange={handleChange}
             placeholder="Date of Appointment" />
           <h3 className='text-dark my-4'>Doctor:</h3>
-          <Form.Select aria-label="Default select example" 
-            name="doctorId" 
+          <Form.Select aria-label="Default select example"
+            name="doctorId"
             value={values.doctorId}
-            onChange={(e)=>{handleChange(e); handleSelectedDoctor(values, e)}}>
+            onChange={(e) => { handleChange(e); handleSelectedDoctor(values, e) }}>
             <option>Select Doctor for visit</option>
             {
               doctors?.map(doctor => <option 
                 value={doctor.id} 
                 key={doctor.id}
               >Dr. {doctor.name} {doctor.surname} </option>)
+
             }
           </Form.Select>
 
 
           <h3 className='text-dark my-4'>Available timeslots:</h3>
-          <div className='timeslot-radio'  role="group" aria-labelledby="timeslots">
+          <div className='timeslot-radio' role="group" aria-labelledby="timeslots">
 
 
-            { doctorsSlots?.map(slot=>
+            {/* { doctorsSlots?.map(slot=>
             
                         <Form.Check
                           key={slot.id}
@@ -158,7 +174,7 @@ const getDoctorsSlots = async ( freeSlotRequest: TFreeSlotRequest ) => {
                         />
             
             
-            )}
+            )} */}
 
 
           </div>
@@ -167,9 +183,11 @@ const getDoctorsSlots = async ( freeSlotRequest: TFreeSlotRequest ) => {
             <Button className=' mx-1 my-2' variant="primary" type="submit">
               Save
             </Button>
-            <Button className=' mx-1 my-2' variant="danger" type="button">
-              Cancel
-            </Button>
+            <Link to="/dashboard/myappointments" >
+              <Button className=' mx-1 my-2' variant="danger" type="button">
+                Cancel
+              </Button>
+            </Link>
           </Form.Group>
         </Form>
       )}

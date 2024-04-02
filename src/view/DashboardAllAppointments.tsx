@@ -14,7 +14,7 @@ const DashboardAllAppointments: React.FunctionComponent<IDashboardAllAppointment
     <Col><h1 className='text-primary my-4'>My Appointments</h1></Col>
       
     <Col lg={2} md={2} xs={2}> 
-    <Link to="/dashboard/editappointment" className='"nav-link text-white  align-middle px-0'>
+    <Link to="/dashboard/editappointment" state={{id: 0}} className='"nav-link text-white  align-middle px-0'>
 
     <Button className='' variant="danger" type="button">
                 Add New 
