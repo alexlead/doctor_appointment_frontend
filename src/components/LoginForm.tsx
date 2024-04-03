@@ -5,8 +5,8 @@ import * as formik from 'formik';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '../store/slices/modalSlice';
-import { decodedUser, userAuthResponse, userLogin, userLoginForm } from '../api/userAuthorisation';
-import { authenticatedAction, authorizedAction } from '../store/slices/userSlice';
+import { decodedUser, userAuthResponse, userLogin, userLoginForm, userValues } from '../api/userAuthorisation';
+import { authenticatedAction, authorizedAction, setUserAction } from '../store/slices/userSlice';
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 
@@ -48,6 +48,14 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
                 const user:decodedUser = jwtDecode( data.accessToken );
                 console.log(user)
 
+                const userForSlice: userValues = {
+                    name: user.name,
+                    surname: user.surname,
+                    email: user.sub,
+                }
+
+
+                dispatch(setUserAction( userForSlice ))
                 dispatch(authenticatedAction( data.accessToken ))
                 dispatch(authorizedAction( user.roles[0].authority ))
                 navigate("/dashboard")

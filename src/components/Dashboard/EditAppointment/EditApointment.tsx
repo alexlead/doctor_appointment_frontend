@@ -4,8 +4,8 @@ import { doctor, getDoctors } from '../../../api/doctorsList';
 import * as formik from 'formik';
 
 import * as yup from 'yup';
-import { getFreeSlots, slot, TFreeSlotRequest } from '../../../api/patientAppointmentsApi';
-import { Link, useLocation } from 'react-router-dom';
+import { getFreeSlots, saveAppointment, slot, TFreeSlotRequest, TSaveAppointment } from '../../../api/patientAppointmentsApi';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 interface IEditAppointmentProps {
 
@@ -18,13 +18,18 @@ interface IAppointmentValues {
   timeslots: number;
 }
 
+export type TSlotOptions = {
+  id: number;
+  startTime: string;
+  endTime: string;
+  status: "free" | "booked" | "current"
+}
 
 
 const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) => {
 
   const { state } = useLocation();
-
-  console.log(state)
+  const navigate = useNavigate();
 
   const { Formik } = formik;
 
@@ -42,7 +47,7 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
   const maxDate = today.toISOString().slice(0, 10);
 
   const [doctors, setDoctors] = useState<doctor[] | null>(null);
-  const [doctorsSlots, setDodctorsSlots] = useState<TFreeSlotRequest | null>(null);
+  const [doctorsSlots, setDodctorsSlots] = useState<TSlotOptions[] | null>(null);
 
   const getDoctorsList = async () => {
     try {
@@ -66,7 +71,18 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
     try {
       const res = await getFreeSlots(freeSlotRequest);
       const data = await res.json();
-      setDodctorsSlots(data);
+      
+      const allFreeIds: number[] = data.free.map((d:slot)=>d.id);
+      const detailedSlots: TSlotOptions[] = data.all.map( (d:slot) => {
+        if (allFreeIds.includes(d.id)) {
+          return { ...d, status: "free"}
+        } else {
+          return { ...d, status: "booked"}
+        }
+      } )
+
+      
+      setDodctorsSlots(detailedSlots);
     } catch (error) {
       console.log(error);
     }
@@ -98,12 +114,24 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
   }
 
   function updateSlots(freeSlotRequest: TFreeSlotRequest): void {
-    console.log(freeSlotRequest);
+
     getDoctorsSlots(freeSlotRequest);
   }
 
-  const handleSubmitForm = (values: IAppointmentValues) => {
+  const handleSubmitForm = async (values: IAppointmentValues) => {
     console.log(values);
+    const payload: TSaveAppointment = {
+      id: state.id,
+      date: values.appointmentDate,
+      userId1: "" + values.doctorId,
+      slotId: "" + values.timeslots 
+    }
+
+    console.log(await saveAppointment(payload));
+
+    navigate("/dashboard/myappointments");
+    
+
   }
 
   return (
@@ -114,7 +142,7 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
       onSubmit={values => handleSubmitForm(values)}
       initialValues={{
         appointmentDate: minDate,
-        doctorId: 4,
+        doctorId: 0,
         timeslots: 0
       }}
     >
@@ -159,12 +187,12 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
           <div className='timeslot-radio' role="group" aria-labelledby="timeslots">
 
 
-            {/* { doctorsSlots?.map(slot=>
+            { doctorsSlots?.map(slot=>
             
                         <Form.Check
                           key={slot.id}
                           inline
-                          disabled={false}
+                          disabled={ slot.status==="booked" }
                           label={`${slot.startTime} - ${slot.endTime}`}
                           name="timeslots"
                           type={'radio'}
@@ -172,9 +200,7 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
                           value={slot.id}
                           onChange={handleChange}
                         />
-            
-            
-            )} */}
+            )}
 
 
           </div>

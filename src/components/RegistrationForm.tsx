@@ -6,7 +6,10 @@ import * as formik from 'formik';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { closeModal, openModal } from '../store/slices/modalSlice';
-import { userRegistration, userRegistrationForm } from '../api/userAuthorisation';
+import { decodedUser, userRegistration, userRegistrationForm, userValues } from '../api/userAuthorisation';
+import { authenticatedAction, authorizedAction, setUserAction } from '../store/slices/userSlice';
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 interface IRegistrationFormProps {
 }
 
@@ -29,8 +32,9 @@ const RegistrationForm: React.FunctionComponent<IRegistrationFormProps> = () => 
     });
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const handleSubmitForm = (values: registrationValues) => {
+    const handleSubmitForm = async (values: registrationValues) => {
         console.log(values)
 
         const credentials: userRegistrationForm = {
@@ -40,7 +44,38 @@ const RegistrationForm: React.FunctionComponent<IRegistrationFormProps> = () => 
             password: values.password
         }
 
-        userRegistration( credentials );
+        try{
+
+            const res = await userRegistration( credentials )
+            const data = await res.json();
+            console.log(res.status);
+            console.log(data);
+
+            if ( res.status == 200 ) {
+
+                localStorage.setItem('token', data.refreshToken);
+                localStorage.setItem('accessToken', data.accessToken);
+
+
+                const user:decodedUser = jwtDecode( data.accessToken );
+                console.log(user)
+
+                const userForSlice: userValues = {
+                    name: user.name,
+                    surname: user.surname,
+                    email: user.sub,
+                }
+
+                dispatch(setUserAction( userForSlice ))
+                dispatch(authenticatedAction( data.accessToken ))
+                dispatch(authorizedAction( user.roles[0].authority ))
+                navigate("/dashboard")
+                
+            }
+            
+        } catch (error) {
+            console.log(error);
+          }
 
         
         dispatch(closeModal())

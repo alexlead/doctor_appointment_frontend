@@ -20,11 +20,11 @@ const MyAppointments: React.FunctionComponent<IMyAppointmentsProps> = (props) =>
   const [totalPages, setTotalPages ] = useState<number>(0)
   const [page, setPage] = useState<number>(1);
 
+
   const getPatientsAppointmentList = async () => {
     try {
       const res = await getPatientAppointmentByPeriod();
       const data = await res.json();
-      console.log("appointment: ", data)
       setAppointments(data.sort( (a:TDetailedAppointment, b: TDetailedAppointment) => Date.parse(b.date) - Date.parse(a.date) ));
       setTotalPages( Math.ceil( data.length / 5 ) )
       getPageAppointments( 1 );

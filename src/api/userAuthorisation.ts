@@ -28,6 +28,12 @@ export type userRegistrationForm = {
     password: string;
 }
 
+export type userValues = {
+  name: null | string;
+  surname: null | string;
+  email: null | string;
+}
+
   export async function userRegistration ( credentials: userRegistrationForm ) {
 
     return await fetch(

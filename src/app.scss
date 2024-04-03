@@ -87,6 +87,54 @@ $theme-colors: ("white": #ffffff,
 }
 
 
+    .profile_photo {
+        position: relative;
+        margin: 15px 0;
+        &__file {
+            border: 1px solid map.get($theme-colors, "primary");
+            padding: 5px;
+            input{
+                display: none;
+            }
+            label{
+                cursor: pointer;
+                width: 100%;
+                display: block;
+                }
+            &__view{
+                border: 1px dashed map.get($theme-colors, "primary");
+                height: 200px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                img{
+                    
+                    height: 100%;
+                    width: auto;
+                    margin: 0 auto;
+                    }
+                
+                div{
+                    
+                    border: 1px double map.get($theme-colors, "primary");
+                    padding: 20px 30px;
+                    font-size: 30px;
+                    font-weight: bold;
+                    color: map.get($theme-colors, "primary");
+                    
+                    }
+                }
+
+        }
+
+            button{
+       position: absolute;
+    right: 20px;
+    bottom: 20px;
+                }
+
+    }
+
 .appcard {
 
     display: inline-block;
