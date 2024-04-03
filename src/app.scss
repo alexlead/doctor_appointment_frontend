@@ -1,6 +1,7 @@
 @use "sass:map";
 
 
+
 $theme-colors: ("white": #ffffff,
     "light-grey": #dfdfdf,
     "grey": #cccccc,
@@ -169,10 +170,10 @@ justify-content: space-between;
     display: flex;
     flex-direction: column; 
     justify-content: center; 
-    align-items: center; /* Выравнивание по центру */
+    align-items: center; 
     padding: 20px; 
     color: white; 
-    font-size: 60px; /* Увеличение размера текста */
+    font-size: 60px; 
     font-weight: bold; 
 }
 
@@ -180,7 +181,7 @@ justify-content: space-between;
     text-align: center; 
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
     margin-bottom: 20px; 
-    font-size: 45px; /* Увеличение размера текста */
+    font-size: 45px; 
 }
 
 .appcard-banner .btn {
@@ -188,7 +189,7 @@ justify-content: space-between;
     color: white; 
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
     margin-top: 70px; 
-    align-self: flex-end; /* Перемещение кнопки вниз справа */
+    align-self: flex-end; 
 }
 
 
@@ -252,4 +253,93 @@ justify-content: space-between;
         }
     }
 }
+
+.main-page-doctors-heading {
+    h2 {
+        color: map.get($theme-colors, "black");
+        margin-top: 1cm;
+    }
+}
+
+.text-primary {
+    color: map.get($theme-colors, "primary");
+    font-size: 2em;
+}
+
+.doctor-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 400px;
+    height: 500px;
+    border: 1px solid map.get($theme-colors, "grey");
+    border-radius: 10px;
+    background-color: map.get($theme-colors, "white");
+    padding: 20px;
+    margin-bottom: 20px;
+
+    img {
+        margin-top: 50px;
+        width: 80%; 
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 20px; 
+    }
+
+    .doctor-info {
+        margin-top: auto; 
+
+        .doctor-name {
+            color: map.get($theme-colors, "primary");
+            font-size: 1.5em;
+            margin-bottom: 10px; 
+        }
+
+        .btn-doctor-sign-in {
+            background-color: map.get($theme-colors, "danger");
+            color: map.get($theme-colors, "white");
+            border-color: map.get($theme-colors, "danger");
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-doctor-sign-in:hover {
+            background-color: darken(map.get($theme-colors, "danger"), 10%);
+            border-color: darken(map.get($theme-colors, "danger"), 10%);
+        }
+    }
+
+}
+
+
+.img-doctor1, .img-doctor2, .img-doctor3 {
+    width: 100%;
+    height: auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain; 
+}
+
+.img-doctor1 {
+    background-image: url('assets/images/doctor1.png');
+}
+
+.img-doctor2 {
+    background-image: url('assets/images/doctor2.png');
+}
+
+.img-doctor3 {
+    background-image: url('assets/images/doctor3.png');
+}
+
+
+    .doctors-subheading {
+        font-weight: bold;
+        font-size: 35px; 
+        margin-bottom: 1 cm; 
+        color:map.get($theme-colors, "primary")
+    }
+
 
