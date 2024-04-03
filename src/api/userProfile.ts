@@ -8,7 +8,7 @@ export type userMeta = {
 export async function getUserProfile () {
   
     return await fetch(
-      `/api/profile'`,
+      `/api/profile`,
       {
         method: "GET",
         headers: requestHeader,
@@ -19,7 +19,7 @@ export async function getUserProfile () {
 export async function updateUserProfile (metaData:userMeta[]) {
   
     return await fetch(
-      `/api/profile'`,
+      `/api/profile`,
       {
         method: "PUT",
         headers: requestHeader,
@@ -33,7 +33,7 @@ export async function updateUserProfile (metaData:userMeta[]) {
 export async function deleteUserProfile (metaData:userMeta[]) {
   
     return await fetch(
-      `/api/profile'`,
+      `/api/profile`,
       {
         method: "DELETE",
         headers: requestHeader,

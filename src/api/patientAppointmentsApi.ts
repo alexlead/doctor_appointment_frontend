@@ -20,25 +20,34 @@ export type TPatientAppointment = {
 }
 
 export type TDetailedAppointment =   {
-  id: number,
+  id: number;
   doctorId: {
-    id: number,
-    name: string,
-    surname: string
+    id: number;
+    name: string;
+    surname: string;
   },
   slotId: {
-    id: number,
-    startTime: string,
-    endTime: string
+    id: number;
+    startTime: string;
+    endTime: string;
   },
-  date: string,
-  visitComplete: boolean
+  date: string;
+  visitComplete: boolean;
 }
 
 export type TFreeSlotsByDate = {
   all : slot[];
   free: slot[];
 }
+
+
+export type TSaveAppointment = {
+  id: number;
+  date: string;
+  userId1: string;
+  slotId: string;
+}
+
 
 export const requestHeader = getRequestHeader();
 export async function getFreeSlots (freeSlotRequest: TFreeSlotRequest) {
@@ -64,7 +73,7 @@ export async function savePatientAppointment ( appointment: TPatientAppointment)
 export async function getPatientFutureAppointment () {
   
   return await fetch(
-    `/api/appointments/patient/future/2`,
+    `/api/appointments/patient/future/`,
     {
       method: "GET",
       headers: requestHeader,
@@ -77,7 +86,7 @@ export async function getPatientFutureAppointment () {
 export async function getPatientPastAppointment () {
 
   return await fetch(
-    `/api/appointments/patient/past/2`,
+    `/api/appointments/patient/past/`,
     {
       method: "GET",
       headers: requestHeader,
@@ -104,11 +113,29 @@ export async function getPatientAppointmentByPeriod ( startPeriod: string = "", 
   }
 
   return await fetch(
-    `/api/appointments/patient/2/${startDate}/${endDate}`,
+    `/api/appointments/patient/${startDate}/${endDate}`,
     {
       method: "GET",
       headers: requestHeader,
 
     }
     );
+}
+
+
+export async function saveAppointment ( formData: TSaveAppointment) {
+
+    console.log(formData)
+
+  return await fetch(
+    `/api/appointments/new`,
+    {
+      method: "POST",
+      headers: requestHeader,
+      body: JSON.stringify(
+        formData
+    )
+    }
+    );
+
 }

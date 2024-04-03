@@ -9,19 +9,23 @@ interface IMyAppointmentsProps {
 
 const MyAppointments: React.FunctionComponent<IMyAppointmentsProps> = (props) => {
 
-
+  const today = new Date();
+  today.setMonth(today.getMonth() - 1 );
+  const startDate:string = today.toLocaleString("en-US" );
+  today.setMonth(today.getMonth() + 2);
+  const endDate:string = today.toLocaleDateString('en-US');
 
   const [appointments, setAppointments ] = useState<TDetailedAppointment[] | null>(null);
   const [pageAppointments, setPageAppointments ] = useState <TDetailedAppointment[] | null>(null)
   const [totalPages, setTotalPages ] = useState<number>(0)
   const [page, setPage] = useState<number>(1);
 
+
   const getPatientsAppointmentList = async () => {
     try {
       const res = await getPatientAppointmentByPeriod();
       const data = await res.json();
-      console.log("appointment: ", data)
-      setAppointments(data);
+      setAppointments(data.sort( (a:TDetailedAppointment, b: TDetailedAppointment) => Date.parse(b.date) - Date.parse(a.date) ));
       setTotalPages( Math.ceil( data.length / 5 ) )
       getPageAppointments( 1 );
     } catch (error) {
@@ -51,7 +55,7 @@ const MyAppointments: React.FunctionComponent<IMyAppointmentsProps> = (props) =>
 
   return (
     <div className="col-11">
-        <MyAppointmentsFilters />
+        <MyAppointmentsFilters startDate={startDate} endDate={endDate} />
         <MyAppointmentsTable appointments={pageAppointments}/>
         <MyAppointmentsPagination total={totalPages} currentPage={page} selectPage={selectPage} />
     </div>

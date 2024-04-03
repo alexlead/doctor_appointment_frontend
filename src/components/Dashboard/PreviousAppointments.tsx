@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import UpcommingAppointmentCard from './UpcommingAppointmentCard';
 import { Container, Row, Col } from 'react-bootstrap';
 import PreviousAppointmentCard from './PreviousAppointmentCard';
@@ -22,6 +22,10 @@ const PreviousAppointments: React.FunctionComponent<IPreviousAppointmentsProps> 
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    getPastAppointments();
+  }, [])
 
 
   return (
