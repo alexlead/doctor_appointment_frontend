@@ -30,22 +30,22 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [auth, setAuth] = useState< userAuthResponse | null>(null)
+    const [auth, setAuth] = useState<userAuthResponse | null>(null)
 
-    async function tryLogin ( credentials: userLoginForm ) {
+    async function tryLogin(credentials: userLoginForm) {
         try {
-            const res = await userLogin( credentials )
+            const res = await userLogin(credentials)
             const data = await res.json();
             console.log(res.status);
             console.log(data);
-            
-            if ( res.status == 200 ) {
+
+            if (res.status == 200) {
 
                 localStorage.setItem('token', data.refreshToken);
                 localStorage.setItem('accessToken', data.accessToken);
 
 
-                const user:decodedUser = jwtDecode( data.accessToken );
+                const user: decodedUser = jwtDecode(data.accessToken);
                 console.log(user)
 
                 const userForSlice: userValues = {
@@ -55,16 +55,16 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
                 }
 
 
-                dispatch(setUserAction( userForSlice ))
-                dispatch(authenticatedAction( data.accessToken ))
-                dispatch(authorizedAction( user.roles[0].authority ))
+                dispatch(setUserAction(userForSlice))
+                dispatch(authenticatedAction(data.accessToken))
+                dispatch(authorizedAction(user.roles[0].authority))
                 navigate("/dashboard")
                 setAuth(data)
-                
+
             }
-          } catch (error) {
+        } catch (error) {
             console.log(error);
-          }
+        }
     }
 
 
@@ -76,7 +76,7 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
             password: values.password
         }
 
-       tryLogin( credentials ) ;
+        tryLogin(credentials);
 
         dispatch(closeModal())
     }

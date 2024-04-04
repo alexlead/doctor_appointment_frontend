@@ -4,7 +4,7 @@ import { doctor, getDoctors } from '../../../api/doctorsList';
 import * as formik from 'formik';
 
 import * as yup from 'yup';
-import { getFreeSlots, saveAppointment, slot, TFreeSlotRequest, TSaveAppointment } from '../../../api/patientAppointmentsApi';
+import { getAppointmentById, getFreeSlots, saveAppointment, slot, TFreeSlotRequest, TFullDetailedAppointment, TSaveAppointment } from '../../../api/patientAppointmentsApi';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 interface IEditAppointmentProps {
@@ -45,9 +45,12 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
   const minDate = today.toISOString().slice(0, 10);
   today.setMonth(today.getMonth() + 1);
   const maxDate = today.toISOString().slice(0, 10);
+ 
 
+  const [blockByDate, setBlockByDate] = useState<boolean>(false)
   const [doctors, setDoctors] = useState<doctor[] | null>(null);
   const [doctorsSlots, setDodctorsSlots] = useState<TSlotOptions[] | null>(null);
+  const [currentAppointment, setCurrentAppointment] = useState<TFullDetailedAppointment | null>(null);
 
   const getDoctorsList = async () => {
     try {
@@ -60,28 +63,57 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
     }
   }
 
+
+  async function getCurrentAppointment () {
+    if(state.id < 1 ) {
+      return;
+    }
+    try {
+      const res = await getAppointmentById( state.id );
+      const data = await res.json();
+      updateSlots({
+        date: data.date,
+        doctorId: data.doctorId.id
+      })
+
+
+      setBlockByDate ( Date.parse(data.date) < (Date.now()) );
+
+      setCurrentAppointment(data);
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+
   useEffect(() => {
 
     if (doctors === null) {
       getDoctorsList();
     }
+
+    getCurrentAppointment();
+
   }, []);
 
   const getDoctorsSlots = async (freeSlotRequest: TFreeSlotRequest) => {
     try {
       const res = await getFreeSlots(freeSlotRequest);
       const data = await res.json();
-      
-      const allFreeIds: number[] = data.free.map((d:slot)=>d.id);
-      const detailedSlots: TSlotOptions[] = data.all.map( (d:slot) => {
-        if (allFreeIds.includes(d.id)) {
-          return { ...d, status: "free"}
-        } else {
-          return { ...d, status: "booked"}
-        }
-      } )
 
-      
+      const allFreeIds: number[] = data.free.map((d: slot) => d.id);
+      const detailedSlots: TSlotOptions[] = data.all.map((d: slot) => {
+        if (allFreeIds.includes(d.id)) {
+          return { ...d, status: "free" }
+        } else {
+          return { ...d, status: "booked" }
+        }
+      })
+
+
       setDodctorsSlots(detailedSlots);
     } catch (error) {
       console.log(error);
@@ -118,19 +150,23 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
     getDoctorsSlots(freeSlotRequest);
   }
 
+
+  
+
+
   const handleSubmitForm = async (values: IAppointmentValues) => {
     console.log(values);
     const payload: TSaveAppointment = {
       appointmentId: state.id,
       date: values.appointmentDate,
       userId1: + values.doctorId,
-      slotId: + values.timeslots 
+      slotId: + values.timeslots
     }
 
     console.log(await saveAppointment(payload));
 
     navigate("/dashboard/myappointments");
-    
+
 
   }
 
@@ -139,11 +175,12 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
 
     <Formik
       validationSchema={schema}
+      enableReinitialize={true}
       onSubmit={values => handleSubmitForm(values)}
       initialValues={{
-        appointmentDate: minDate,
-        doctorId: 0,
-        timeslots: 0
+        appointmentDate: (currentAppointment !==null)? currentAppointment?.date : minDate,
+        doctorId: (currentAppointment !==null)? currentAppointment?.doctorId.id : 0,
+        timeslots: (currentAppointment !==null)? currentAppointment?.slotId.id : 0
       }}
     >
       {({ handleSubmit, handleChange, values, touched, errors }) => (
@@ -161,6 +198,7 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
           <Form.Control
             type="date"
             name="appointmentDate"
+            disabled={blockByDate}
             min={minDate}
             max={maxDate}
             value={values.appointmentDate}
@@ -171,11 +209,12 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
           <Form.Select aria-label="Default select example"
             name="doctorId"
             value={values.doctorId}
+            disabled={ currentAppointment !==null && currentAppointment.doctorId.id > 0}
             onChange={(e) => { handleChange(e); handleSelectedDoctor(values, e) }}>
             <option>Select Doctor for visit</option>
             {
-              doctors?.map(doctor => <option 
-                value={doctor.id} 
+              doctors?.map(doctor => <option
+                value={doctor.id}
                 key={doctor.id}
               >Dr. {doctor.name} {doctor.surname} </option>)
 
@@ -187,28 +226,31 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
           <div className='timeslot-radio' role="group" aria-labelledby="timeslots">
 
 
-            { doctorsSlots?.map(slot=>
-            
-                        <Form.Check
-                          key={slot.id}
-                          inline
-                          disabled={ slot.status==="booked" }
-                          label={`${slot.startTime} - ${slot.endTime}`}
-                          name="timeslots"
-                          type={'radio'}
-                          id={`inline-radio-${slot.id}`}
-                          value={slot.id}
-                          onChange={handleChange}
-                        />
+            {doctorsSlots?.map(slot =>
+
+              <Form.Check
+                key={slot.id}
+                inline
+                defaultChecked={ (currentAppointment !==null && currentAppointment?.slotId.id === slot.id) ? true: undefined }
+                disabled={slot.status === "booked" || blockByDate}
+                label={`${slot.startTime} - ${slot.endTime}`}
+                name="timeslots"
+                type={'radio'}
+                id={`inline-radio-${slot.id}`}
+                value={slot.id}
+                onChange={handleChange}
+              />
             )}
 
 
           </div>
 
           <Form.Group className="d-flex justify-content-end" controlId="formButtons">
+          { !blockByDate &&
             <Button className=' mx-1 my-2' variant="primary" type="submit">
               Save
             </Button>
+          }
             <Link to="/dashboard/myappointments" >
               <Button className=' mx-1 my-2' variant="danger" type="button">
                 Cancel

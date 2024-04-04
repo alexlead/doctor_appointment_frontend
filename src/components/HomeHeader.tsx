@@ -14,13 +14,13 @@ import { Link } from 'react-router-dom';
 
 const HomeHeader = () => {
   const user = useSelector(selectUser);
- 
-  
+
+
 
   return (
     <div className="navbar navbar-expand-lg p-0">
-    <LoginWindow/>
-    <RegistrationWindow />
+      <LoginWindow />
+      <RegistrationWindow />
 
       <div className="container">
 
@@ -30,16 +30,16 @@ const HomeHeader = () => {
 
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="justify-content-end flex-grow-1 pe-3">
-              { (user.accessToken && user.permissions) ? ( 
-                <Link to="/dashboard">
-                  Dashboard
-                </Link>
-              ) : (
-                <>
-                <LoginFormLaunch />
-                <RegistrationFormLaunch />
-                </>
-              ) }
+                {(user.accessToken && user.permissions) ? (
+                  <Link to="/dashboard">
+                    Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <LoginFormLaunch />
+                    <RegistrationFormLaunch />
+                  </>
+                )}
               </Nav>
 
             </Navbar.Collapse>

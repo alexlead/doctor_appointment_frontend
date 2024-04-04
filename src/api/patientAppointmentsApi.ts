@@ -50,6 +50,14 @@ export type TDetailedDoctorAppointment = {
   visitComplete: boolean;
 }
 
+export type TFullDetailedAppointment = TDetailedAppointment & {
+  patientId: {
+    id: number;
+    name: string;
+    surname: string;
+  }
+};
+
 export type TFreeSlotsByDate = {
   all: slot[];
   free: slot[];
@@ -123,6 +131,7 @@ export async function getPatientAppointmentByPeriod(startPeriod: string = "", en
     endDate = endPeriod;
   }
 
+  console.log(`/api/appointments/${startDate}/${endDate}`)
   return await fetch(
     `/api/appointments/${startDate}/${endDate}`,
     {

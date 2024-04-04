@@ -8,7 +8,7 @@ interface IRegistrationFormLaunchProps {
 
 const RegistrationFormLaunch: React.FunctionComponent<IRegistrationFormLaunchProps> = () => {
 
-    
+
     const dispatch = useDispatch();
 
     const setModalLoginShow = () => {
