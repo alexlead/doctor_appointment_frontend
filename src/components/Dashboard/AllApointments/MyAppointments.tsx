@@ -2,30 +2,77 @@ import React, { useEffect, useState } from 'react';
 import MyAppointmentsPagination from './MyAppointmentsPagination';
 import MyAppointmentsTable from './MyAppointmentsTable';
 import MyAppointmentsFilters from './MyAppointmentsFilters';
-import { getPatientAppointmentByPeriod, TDetailedAppointment } from '../../../api/patientAppointmentsApi';
+import { deleteAppointmentById, getPatientAppointmentByPeriod, TDetailedAppointment, TDetailedDoctorAppointment } from '../../../api/patientAppointmentsApi';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../../store/slices/userSlice';
 
 interface IMyAppointmentsProps {
 }
 
+export type filterDates = {
+  startDate:string;
+  endDate:string;
+}
+
 const MyAppointments: React.FunctionComponent<IMyAppointmentsProps> = (props) => {
 
-  const today = new Date();
-  today.setMonth(today.getMonth() - 1 );
-  const startDate:string = today.toLocaleString("en-US" );
-  today.setMonth(today.getMonth() + 2);
-  const endDate:string = today.toLocaleDateString('en-US');
+  const { permissions } = useSelector(selectUser);
+
+
+
+  const [filter, setFilter ] = useState<filterDates | null>(null);
+  const [requestFilter, setRequestFilter ] = useState<filterDates | null>(null);
+
+
 
   const [appointments, setAppointments ] = useState<TDetailedAppointment[] | null>(null);
   const [pageAppointments, setPageAppointments ] = useState <TDetailedAppointment[] | null>(null)
+  const [doctorAppointments, setDoctorAppointments ] = useState<TDetailedDoctorAppointment[] | null>(null);
+  const [pageDoctorAppointments, setPageDoctorAppointments ] = useState <TDetailedDoctorAppointment[] | null>(null)
   const [totalPages, setTotalPages ] = useState<number>(0)
   const [page, setPage] = useState<number>(1);
 
+
+  const initFilters = () => {
+
+
+    const datesForFilter:filterDates = {
+      startDate: "",
+      endDate: ""
+    }  
+
+    const datesForRequest:filterDates = {
+      startDate: "",
+      endDate: ""
+    }
+    const today = new Date();
+    today.setMonth(today.getMonth() - 1 );
+    datesForFilter.startDate = today.toLocaleString("en-US" );
+    datesForRequest.startDate = today.toISOString().slice(0, 10);
+
+
+    today.setMonth(today.getMonth() + 2);
+    datesForFilter.endDate = today.toLocaleDateString('en-US');
+    datesForRequest.endDate = today.toISOString().slice(0, 10);
+
+    setFilter(datesForFilter);
+    setRequestFilter(datesForRequest)
+
+
+  }
+
+  
 
   const getPatientsAppointmentList = async () => {
     try {
       const res = await getPatientAppointmentByPeriod();
       const data = await res.json();
+      if ( permissions === "ROLE_PATIENT" ) {
       setAppointments(data.sort( (a:TDetailedAppointment, b: TDetailedAppointment) => Date.parse(b.date) - Date.parse(a.date) ));
+    }
+    if ( permissions === "ROLE_DOCTOR" ) { 
+      setDoctorAppointments(data.sort( (a:TDetailedDoctorAppointment, b: TDetailedDoctorAppointment) => Date.parse(b.date) - Date.parse(a.date) )); 
+      }
       setTotalPages( Math.ceil( data.length / 5 ) )
       getPageAppointments( 1 );
     } catch (error) {
@@ -36,8 +83,12 @@ const MyAppointments: React.FunctionComponent<IMyAppointmentsProps> = (props) =>
   function getPageAppointments (id: number ) {
     const begin = id * 5 - 5;
     const end = id * 5
-    setPageAppointments( appointments?.slice(begin, end) || null )
-    console.log( pageAppointments )
+    if ( permissions === "ROLE_PATIENT" ) {
+      setPageAppointments( appointments?.slice(begin, end) || null )
+      console.log( pageAppointments )
+    } else if( permissions === "ROLE_DOCTOR" ) {
+      setPageDoctorAppointments ( doctorAppointments?.slice(begin, end) || null ) 
+    }
   }
 
 
@@ -46,17 +97,37 @@ const MyAppointments: React.FunctionComponent<IMyAppointmentsProps> = (props) =>
     getPageAppointments ( id );
   } 
 
+  const deleteAppointment = async( id: number) => {
+
+    try{
+      const res = await deleteAppointmentById(id);
+
+      console.log(res)
+
+      if ( res.status === 200 ) {
+        setPage(1);
+        getPatientsAppointmentList();
+      }
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   useEffect(()=>{
+    if(filter === null) {
+      initFilters();
+    }
     if( appointments === null ) {
       getPatientsAppointmentList();
     }
     getPageAppointments(1);
-  },[appointments])
+  },[appointments, doctorAppointments])
 
   return (
     <div className="col-11">
-        <MyAppointmentsFilters startDate={startDate} endDate={endDate} />
-        <MyAppointmentsTable appointments={pageAppointments}/>
+        <MyAppointmentsFilters filter={filter} />
+        <MyAppointmentsTable appointments={pageAppointments} doctorAppointments={pageDoctorAppointments} deleteAppointment={deleteAppointment}/>
         <MyAppointmentsPagination total={totalPages} currentPage={page} selectPage={selectPage} />
     </div>
   );

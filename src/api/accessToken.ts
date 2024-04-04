@@ -4,7 +4,7 @@ type authHeader = {
     'Authorization': string;
 }
 
-export function getRequestHeader () {
+export function getRequestHeader() {
 
     const token = localStorage.getItem("accessToken")
 
