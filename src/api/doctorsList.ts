@@ -1,13 +1,13 @@
 import { getRequestHeader } from "./accessToken";
 
 export type doctor = {
-        id: number;
-        name: string;
-        surname: string;
+  id: number;
+  name: string;
+  surname: string;
 }
 const requestHeader = getRequestHeader();
 
-export async function getDoctors () {
+export async function getDoctors() {
 
 
   return await fetch(

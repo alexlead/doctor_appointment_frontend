@@ -1,30 +1,31 @@
-import  React from 'react';
+import React from 'react';
 import { Form } from 'react-bootstrap';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
+import { filterDates } from './MyAppointments';
 
 interface IMyAppointmentsFiltersProps {
-  startDate: string;
-  endDate: string;
+  filter: filterDates | null
 }
 
 
 
-const MyAppointmentsFilters: React.FunctionComponent<IMyAppointmentsFiltersProps> = ({startDate, endDate}) => {
+const MyAppointmentsFilters: React.FunctionComponent<IMyAppointmentsFiltersProps> = ({ filter }) => {
 
 
-  const handleCallback = (start:any, end:any) => {
-          console.log(start.toISOString().slice(0,10), end.toISOString().slice(0,10) );
-     };
+  const handleCallback = (start: any, end: any) => {
+    console.log(start.toISOString().slice(0, 10), end.toISOString().slice(0, 10));
+  };
   return (
     <div className="my-4">
-        Filter: 
-
+      Filter:
+{filter && 
       <DateRangePicker
-  initialSettings={{ startDate: startDate, endDate: endDate }}
-  onCallback={handleCallback}
->
-  <input type="text" className="form-control"/>
-</DateRangePicker>
+      initialSettings={{ startDate: filter.startDate, endDate: filter.endDate }}
+      onCallback={handleCallback}
+      >
+        <input type="text" className="form-control" />
+      </DateRangePicker>
+      }
 
 
 

@@ -34,7 +34,7 @@ const PreviousAppointments: React.FunctionComponent<IPreviousAppointmentsProps> 
       <h2 className=' my-4'>Previous visits</h2>
       <div>
         {appointments ? (
-          appointments.map(appointment => <PreviousAppointmentCard appointment={appointment} />)
+          appointments.map(appointment => <PreviousAppointmentCard appointment={appointment} key={appointment.id}/>)
 
         ) : (
           <div className='empty_list empty_cards_list'> You have no previous appointment.</div>

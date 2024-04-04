@@ -121,10 +121,10 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
   const handleSubmitForm = async (values: IAppointmentValues) => {
     console.log(values);
     const payload: TSaveAppointment = {
-      id: state.id,
+      appointmentId: state.id,
       date: values.appointmentDate,
-      userId1: "" + values.doctorId,
-      slotId: "" + values.timeslots 
+      userId1: + values.doctorId,
+      slotId: + values.timeslots 
     }
 
     console.log(await saveAppointment(payload));
