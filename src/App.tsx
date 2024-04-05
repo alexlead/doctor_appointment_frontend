@@ -23,11 +23,11 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/dashboard' element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-              
-              } >
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+
+        } >
           <Route path='' element={<DashboardCommingAppointments />} />
           <Route path='myappointments' element={<DashboardAllAppointments />} />
           <Route path='editappointment' element={<DashboardEditAppointment />} />

@@ -4,12 +4,12 @@ import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { openModal } from '../../store/slices/modalSlice';
 const Banner = () => {
-  
+
 
   const dispatch = useDispatch();
 
   const showModalLogin = () => {
-      dispatch(openModal("login"))
+    dispatch(openModal("login"))
   }
 
 
@@ -21,7 +21,7 @@ const Banner = () => {
         <p>Our specialists are ready to help. Contact us now</p>
         <Button variant="primary" onClick={showModalLogin}>Sign In</Button>
       </div>
-  
+
     </div>
   );
 };

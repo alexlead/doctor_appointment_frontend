@@ -24,7 +24,10 @@ const ProfileForm: React.FunctionComponent<IProfileFormProps> = (props) => {
 
     const schema = yup.object().shape({
         phone: yup.string().matches(/[\d()+-]{10,20}$/i, "Invalid phone number"),
-        address: yup.string().max(200, 'too long address, maximum 200 characters long')
+        address: yup.string().max(200, 'too long value, maximum 200 characters long'),
+        education: yup.string().max(50, 'too long value, maximum 50 characters long'),
+        category: yup.string().max(50, 'too long value, maximum 50 characters long'),
+        aboutMe: yup.string().max(400, 'too long value, maximum 400 characters long')
     });
 
     const [userMetaPhone, setUserMetaPhone] = useState<string>("");

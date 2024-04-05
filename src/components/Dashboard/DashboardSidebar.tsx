@@ -11,8 +11,8 @@ const DashboardSidebar: React.FunctionComponent<IDashboardSidebarProps> = (props
     const dispatch = useDispatch();
 
     const logout = () => {
-        dispatch(authenticatedAction( null ))
-        dispatch(authorizedAction( null ))
+        dispatch(authenticatedAction(null))
+        dispatch(authorizedAction(null))
 
     }
 

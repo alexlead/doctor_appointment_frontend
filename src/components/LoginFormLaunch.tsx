@@ -7,7 +7,7 @@ interface ILoginFormLaunchProps {
 }
 
 const LoginFormLaunch: React.FunctionComponent<ILoginFormLaunchProps> = () => {
-   
+
     const dispatch = useDispatch();
 
     const setModalLoginShow = () => {

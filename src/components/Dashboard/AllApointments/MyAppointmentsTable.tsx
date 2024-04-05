@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 interface IMyAppointmentsTableProps {
   appointments: TDetailedAppointment[] | null,
   doctorAppointments: TDetailedDoctorAppointment[] | null,
-  deleteAppointment: (id: number)=>void
+  deleteAppointment: (id: number) => void
 }
 
 const MyAppointmentsTable: React.FunctionComponent<IMyAppointmentsTableProps> = ({ appointments, doctorAppointments, deleteAppointment }) => {
@@ -44,7 +44,7 @@ const MyAppointmentsTable: React.FunctionComponent<IMyAppointmentsTableProps> = 
 
                   {Date.parse(appointment.date) > today &&
 
-                    <Button className=' mx-1 my-2' variant="danger" type="button" onClick={()=>deleteAppointment(appointment.id)}>
+                    <Button className=' mx-1 my-2' variant="danger" type="button" onClick={() => deleteAppointment(appointment.id)}>
                       Cancel
                     </Button>
                   }
@@ -57,57 +57,57 @@ const MyAppointmentsTable: React.FunctionComponent<IMyAppointmentsTableProps> = 
           </tbody>
         </Table>
 
-      ) }
+      )}
 
-{doctorAppointments?.length && (
+      {doctorAppointments?.length && (
 
-<Table size='lg' responsive striped bordered hover>
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Time</th>
-      <th>Patient</th>
-      <th>Tools</th>
-    </tr>
-  </thead>
-  <tbody>
+        <Table size='lg' responsive striped bordered hover>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Patient</th>
+              <th>Tools</th>
+            </tr>
+          </thead>
+          <tbody>
 
-    {doctorAppointments.map(doctorAppointment =>
+            {doctorAppointments.map(doctorAppointment =>
 
-      <tr key={doctorAppointment.id}>
-        <td>{doctorAppointment.date}</td>
-        <td>{doctorAppointment.slotId.startTime} - {doctorAppointment.slotId.endTime}</td>
-        <td>{doctorAppointment.patientId.name} {doctorAppointment.patientId.surname}</td>
-        <td>
+              <tr key={doctorAppointment.id}>
+                <td>{doctorAppointment.date}</td>
+                <td>{doctorAppointment.slotId.startTime} - {doctorAppointment.slotId.endTime}</td>
+                <td>{doctorAppointment.patientId.name} {doctorAppointment.patientId.surname}</td>
+                <td>
 
-          <Link to="/dashboard/editappointment" state={{ id: doctorAppointment.id }} >
-            <Button className=' mx-1 my-2' variant="primary" type="button">
-              View
-            </Button>
-          </Link>
+                  <Link to="/dashboard/editappointment" state={{ id: doctorAppointment.id }} >
+                    <Button className=' mx-1 my-2' variant="primary" type="button">
+                      View
+                    </Button>
+                  </Link>
 
-          {Date.parse(doctorAppointment.date) > today &&
+                  {Date.parse(doctorAppointment.date) > today &&
 
-            <Button className=' mx-1 my-2' variant="danger" type="button">
-              Cancel
-            </Button>
-          }
+                    <Button className=' mx-1 my-2' variant="danger" type="button">
+                      Cancel
+                    </Button>
+                  }
 
-        </td>
-      </tr>
-    )}
+                </td>
+              </tr>
+            )}
 
 
-  </tbody>
-</Table>
+          </tbody>
+        </Table>
 
-) }
+      )}
 
 
       {
         (!appointments?.length && !doctorAppointments?.length) &&
 
-  <div className='empty_list empty_table_list'> You have no previous appointment.</div>
+        <div className='empty_list empty_table_list'> You have no previous appointment.</div>
       }
     </div>
   );

@@ -10,12 +10,12 @@ export type State = {
     surname: undefined | string;
     email: undefined | string;
   }
-  accessToken: null | string ;  
+  accessToken: null | string;
   permissions: null | string;
   loading: boolean;
 };
 const initialState: State = {
-  user:{
+  user: {
     name: undefined,
     surname: undefined,
     email: undefined
@@ -32,7 +32,7 @@ export const userSlice = createSlice({
     authenticateAction: (state) => {
       state.loading = true;
     },
-    setUserAction : (state, action) => {
+    setUserAction: (state, action) => {
       state.user = action.payload;
 
     },

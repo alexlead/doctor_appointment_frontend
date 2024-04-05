@@ -22,10 +22,10 @@ const UpcommingAppointments: React.FunctionComponent<IUpcommingAppointmentsProps
       const res = await getPatientFutureAppointment();
       const data = await res.json();
       console.log(data)
-      if ( permissions === "ROLE_PATIENT" ) {
-      setAppointments(data);
+      if (permissions === "ROLE_PATIENT") {
+        setAppointments(data);
       }
-      if ( permissions === "ROLE_DOCTOR" ) {
+      if (permissions === "ROLE_DOCTOR") {
         setDoctorAppointments(data);
       }
 
@@ -43,27 +43,27 @@ const UpcommingAppointments: React.FunctionComponent<IUpcommingAppointmentsProps
 
     <div>
       <h2 className='text-primary my-4'>Upcoming Appointments</h2>
-      <div  className="container">
-      <div  className="row">
-      <div  className="col-8">
-        {appointments?.length && <>
-          {appointments.map(appointment => <UpcommingAppointmentCard appointment={appointment} doctorAppointment={null} key={appointment.id}/>)}
-        </>
+      <div className="container">
+        <div className="row">
+          <div className="col-8">
+            {appointments?.length && <>
+              {appointments.map(appointment => <UpcommingAppointmentCard appointment={appointment} doctorAppointment={null} key={appointment.id} />)}
+            </>
 
-        } 
-        {doctorAppointments?.length && <>
-          {doctorAppointments.map(doctorAppointment => <UpcommingAppointmentCard appointment={null} doctorAppointment={doctorAppointment} key={doctorAppointment.id}/>)}
-        </>
-        } 
-        {(!appointments?.length && !doctorAppointments?.length) &&  
-          <div className='empty_list empty_cards_list'> You have no upcomming appointment.</div>
-        }
-      </div>
-      <div>
+            }
+            {doctorAppointments?.length && <>
+              {doctorAppointments.map(doctorAppointment => <UpcommingAppointmentCard appointment={null} doctorAppointment={doctorAppointment} key={doctorAppointment.id} />)}
+            </>
+            }
+            {(!appointments?.length && !doctorAppointments?.length) &&
+              <div className='empty_list empty_cards_list'> You have no upcomming appointment.</div>
+            }
+          </div>
+          <div>
 
 
-      </div>
-      </div>
+          </div>
+        </div>
       </div>
 
     </div>

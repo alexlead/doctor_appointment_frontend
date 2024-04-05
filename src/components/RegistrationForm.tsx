@@ -44,20 +44,20 @@ const RegistrationForm: React.FunctionComponent<IRegistrationFormProps> = () => 
             password: values.password
         }
 
-        try{
+        try {
 
-            const res = await userRegistration( credentials )
+            const res = await userRegistration(credentials)
             const data = await res.json();
             console.log(res.status);
             console.log(data);
 
-            if ( res.status == 200 ) {
+            if (res.status == 200) {
 
                 localStorage.setItem('token', data.refreshToken);
                 localStorage.setItem('accessToken', data.accessToken);
 
 
-                const user:decodedUser = jwtDecode( data.accessToken );
+                const user: decodedUser = jwtDecode(data.accessToken);
                 console.log(user)
 
                 const userForSlice: userValues = {
@@ -66,18 +66,18 @@ const RegistrationForm: React.FunctionComponent<IRegistrationFormProps> = () => 
                     email: user.sub,
                 }
 
-                dispatch(setUserAction( userForSlice ))
-                dispatch(authenticatedAction( data.accessToken ))
-                dispatch(authorizedAction( user.roles[0].authority ))
+                dispatch(setUserAction(userForSlice))
+                dispatch(authenticatedAction(data.accessToken))
+                dispatch(authorizedAction(user.roles[0].authority))
                 navigate("/dashboard")
-                
+
             }
-            
+
         } catch (error) {
             console.log(error);
-          }
+        }
 
-        
+
         dispatch(closeModal())
     }
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import TestimonialsCard from './TestimonialsCard';
-import { Button, Container } from 'react-bootstrap'; 
+import { Button, Container } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { openModal } from '../../store/slices/modalSlice';
-import { Swiper, SwiperSlide } from 'swiper/react'; 
+import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -18,7 +18,7 @@ const MainPageTestimonials = () => {
     };
 
     return (
-        <Container> 
+        <Container>
             <div className="main-page-testimonials">
                 <h2 className="text-center text-black">Testimonials</h2>
                 <h3 className="text-center text-primary">What Patients Say About Us</h3>
@@ -26,7 +26,7 @@ const MainPageTestimonials = () => {
                     spaceBetween={30}
                     slidesPerView={3}
                     loop={true}
-                    autoplay={{ delay: 5000 }} 
+                    autoplay={{ delay: 5000 }}
                     className="mySwiper"
                     navigation={true}
                     pagination={{ clickable: true }}

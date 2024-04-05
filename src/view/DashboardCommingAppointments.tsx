@@ -15,7 +15,7 @@ const DashboardCommingAppointments: React.FunctionComponent<IDashboardCommingApp
 
   const { permissions } = useSelector(selectUser);
 
-  
+
   return (
     <div className='py-5'>
 
@@ -28,18 +28,18 @@ const DashboardCommingAppointments: React.FunctionComponent<IDashboardCommingApp
             <UpcommingAppointments />
           </Col>
         </Row>
-        {permissions === "ROLE_PATIENT" && 
-        <Row>
-          <Col>
-            <PreviousAppointments />
-          </Col>
-        </Row>
+        {permissions === "ROLE_PATIENT" &&
+          <Row>
+            <Col>
+              <PreviousAppointments />
+            </Col>
+          </Row>
         }
         <Row>
           <Col className='my-4 text-right' xs={{ span: 4, offset: 6 }}>
             <Link to="/dashboard/myappointments" className='"nav-link text-white  align-middle px-0'>
               <Button className=' mx-1' variant="danger" type="button">
-              All Appointments
+                All Appointments
               </Button>
             </Link>
           </Col>

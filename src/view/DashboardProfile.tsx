@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import ProfileForm from '../components/Dashboard/Profile/ProfileForm';
 
 interface IDashboardProfileProps {
