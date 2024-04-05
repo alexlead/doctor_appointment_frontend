@@ -1,3 +1,5 @@
+import { requestHeader } from "./patientAppointmentsApi";
+
 export type userAuthResponse = {
   accessToken: string;
   refreshToken: string;
@@ -73,4 +75,14 @@ export async function userLogin(credentials: userLoginForm) {
     }
   );
 
+}
+
+export async function userLogout () {
+  return await fetch (
+    `/api/auth/logout`,
+    {
+      method: "GET",
+      headers: requestHeader
+    }
+  )
 }
