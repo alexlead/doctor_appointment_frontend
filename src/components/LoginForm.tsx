@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import * as formik from 'formik';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { closeModal } from '../store/slices/modalSlice';
+import { closeModal, openModal, setErrorMessage } from '../store/slices/modalSlice';
 import { decodedUser, userAuthResponse, userLogin, userLoginForm, userValues } from '../api/userAuthorisation';
 import { authenticatedAction, authorizedAction, setUserAction } from '../store/slices/userSlice';
 import { jwtDecode } from "jwt-decode";
@@ -36,14 +36,11 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
         try {
             const res = await userLogin(credentials)
             const data = await res.json();
-            console.log(res.status);
-            console.log(data);
-
+            
             if (res.status == 200) {
 
                 localStorage.setItem('token', data.refreshToken);
                 localStorage.setItem('accessToken', data.accessToken);
-
 
                 const user: decodedUser = jwtDecode(data.accessToken);
                 console.log(user)
@@ -54,31 +51,29 @@ const LoginForm: React.FunctionComponent<ILoginFormProps> = (props) => {
                     email: user.sub,
                 }
 
-
                 dispatch(setUserAction(userForSlice))
                 dispatch(authenticatedAction(data.accessToken))
                 dispatch(authorizedAction(user.roles[0].authority))
+                dispatch(closeModal())
                 navigate("/dashboard")
                 setAuth(data)
-
+            } else {
+                dispatch(setErrorMessage("Auth credentials are not correct, try again please."))
+                dispatch(openModal("error"))
             }
         } catch (error) {
-            console.log(error);
+            dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+            dispatch(openModal("error"));
         }
     }
 
-
     const handleSubmitForm = (values: loginValues) => {
-        console.log(values)
 
         const credentials: userLoginForm = {
             username: values.username,
             password: values.password
         }
-
         tryLogin(credentials);
-
-        dispatch(closeModal())
     }
 
     return (

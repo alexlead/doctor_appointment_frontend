@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import * as yup from 'yup';
 import * as formik from 'formik';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, State } from '../../../store/slices/userSlice';
 import { Link } from 'react-router-dom';
 import { deleteUserProfile, getUserProfile, updateUserProfile, userMeta } from '../../../api/userProfile';
 import ProfilePhoto from './ProfilePhoto';
+import { openModal, setErrorMessage } from '../../../store/slices/modalSlice';
 
 interface IProfileFormProps {
 }
@@ -15,8 +16,6 @@ const ProfileForm: React.FunctionComponent<IProfileFormProps> = (props) => {
 
 
     const { user, permissions } = useSelector(selectUser);
-
-    console.log(permissions)
 
     const { Formik } = formik;
 
@@ -38,7 +37,7 @@ const ProfileForm: React.FunctionComponent<IProfileFormProps> = (props) => {
     const [userMetaCategory, setUserMetaCategory] = useState<string>("");
     const [userMetaAboutMe, setUserMetaAboutMe] = useState<string>("");
 
-
+    const dispatch = useDispatch();
 
     const getPatientProfile = async () => {
         try {
@@ -79,6 +78,8 @@ const ProfileForm: React.FunctionComponent<IProfileFormProps> = (props) => {
 
         } catch (error) {
             console.log(error);
+            dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+            dispatch(openModal("error"));
         }
     }
 
