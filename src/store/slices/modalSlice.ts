@@ -2,10 +2,12 @@ import { createSlice } from "@reduxjs/toolkit"
 import { RootState } from "../store";
 
 interface IModalState {
-    modal: "none" | "login" | "registration"
+    modal: "none" | "login" | "registration" | "error";
+    errorMessage: string;
 };
 const initialState: IModalState = {
-    modal: "none"
+    modal: "none",
+    errorMessage: ""
 };
 
 export const modalSlice = createSlice({
@@ -19,6 +21,9 @@ export const modalSlice = createSlice({
         },
         closeModal(state) {
             state.modal = 'none'
+        },
+        setErrorMessage(state, action) {
+            state.errorMessage = action.payload
         }
     }
 
@@ -26,7 +31,7 @@ export const modalSlice = createSlice({
 
 export const selectModal = (state: RootState) => state.modal;
 
-export const { openModal, closeModal } = modalSlice.actions;
+export const { openModal, closeModal, setErrorMessage } = modalSlice.actions;
 
 
 export default modalSlice.reducer;

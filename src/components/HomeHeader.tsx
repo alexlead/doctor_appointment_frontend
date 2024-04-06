@@ -15,8 +15,6 @@ import { Link } from 'react-router-dom';
 const HomeHeader = () => {
   const user = useSelector(selectUser);
 
-
-
   return (
     <div className="navbar navbar-expand-lg p-0">
       <LoginWindow />

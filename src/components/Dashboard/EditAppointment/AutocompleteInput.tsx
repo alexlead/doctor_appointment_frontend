@@ -15,18 +15,7 @@ const AutocompleteInput: React.FunctionComponent<IAutocompleteInputProps> = ({pa
         patient &&
       <input type="text" name="search" v-model="search" value={patient.patientId.name + " " + patient.patientId.surname} disabled={true}/>
       }
-      {/* <span className="clear" click="search = ''">x</span> */}
-      {/* <div className="tips">
-        <ul>
-          <li
-            v-for="item of filteredCountries"
-            key="item.code"
-            // click="search = item.name"
-          >
-        <span>{ item.name }</span> 
-          </li>
-        </ul>
-      </div> */}
+
     </div>
   ) ;
 };

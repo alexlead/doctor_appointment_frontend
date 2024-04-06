@@ -261,22 +261,28 @@ justify-content: space-between;
         color: map.get($theme-colors, "primary");
     }
 
+
+
     .testimonials-card {
-        margin: 0 auto;
-        max-width: 400px;
         text-align: left;
         padding: 20px;
         border: 1px solid map.get($theme-colors, "grey");
         border-radius: 10px;
-        background-color: map.get($theme-colors, "light");
+        background-color: map.get($theme-colors, "light-grey");
         margin-bottom: 20px;
+        height: 290px;
 
         p {
             margin-bottom: 10px;
+            &:first-child
+                {
+                    font-style: italic;
+                    }
         }
 
         .author {
             font-weight: bold;
+            text-align: right;
         }
     }
 
@@ -329,8 +335,9 @@ justify-content: space-between;
 
     img {
         margin-top: 50px;
-        width: 80%; 
+        max-width: 80%; 
         height: auto;
+        max-height: 312px;
         border-radius: 10px;
         margin-bottom: 20px; 
     }

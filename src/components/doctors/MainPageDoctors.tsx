@@ -1,24 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { openModal } from '../../store/slices/modalSlice';
+import { openModal, setErrorMessage } from '../../store/slices/modalSlice';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/swiper-bundle.css';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import DoctorCard from './DoctorCard';
+import { getDoctorsWithPhoto } from '../../api/doctorsList';
 
-import doctor1 from '../../assets/images/doctor1.png';
-import doctor2 from '../../assets/images/doctor2.png';
-import doctor3 from '../../assets/images/doctor3.png';
+export interface doctorData {
+    id: number;
+    name: string;
+    surname: string;
+    photo: string;
+}
 
 const MainPageDoctors = () => {
+
+
+    const [doctorsList, setDoctorsList ] = useState<doctorData[] | null>(null);
     const dispatch = useDispatch();
 
-    const showModalLogin = () => {
-        dispatch(openModal("login"));
-    };
+    const getDoctorsList = async () => {
+        try {
+        const res = await getDoctorsWithPhoto();
+        const data = await res.json();
+
+        setDoctorsList(data)
+
+        } catch (error) {
+            console.log(error);
+            dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+            dispatch(openModal("error"));
+        }
+
+    }
+
+
+    useEffect(()=>{
+        getDoctorsList();
+    },[])
 
     return (
         <Container>
@@ -30,38 +55,23 @@ const MainPageDoctors = () => {
                 spaceBetween={30}
                 slidesPerView={3}
                 loop={true}
-                autoplay={{ delay: 5000 }}
-                className="mySwiper"
-                navigation={true}
+                autoplay={{ delay: 6000 }}
+                className="mySwiper py-5 my-2"
+                // navigation={true}
                 pagination={{ clickable: true }}
+                modules={[Pagination, Navigation, Autoplay]}
+                
             >
-                <SwiperSlide>
-                    <div className="doctor-container">
-                        <img src={doctor1} alt="Doctor 1" />
-                        <div className="doctor-info">
-                            <h4 className="doctor-name">Dr. Christopher Brown</h4>
-                            <Button variant="doctor-sign-in" onClick={showModalLogin}>Sign In</Button>
-                        </div>
-                    </div>
+
+{
+    doctorsList?.length && 
+            doctorsList?.map (  (doc, index) => 
+            <SwiperSlide key={index}>
+                    <DoctorCard doctorData={doc}/>
                 </SwiperSlide>
-                <SwiperSlide>
-                    <div className="doctor-container">
-                        <img src={doctor2} alt="Doctor 2" />
-                        <div className="doctor-info">
-                            <h4 className="doctor-name">Dr. Michael Smith</h4>
-                            <Button variant="doctor-sign-in" onClick={showModalLogin}>Sign In</Button>
-                        </div>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div className="doctor-container">
-                        <img src={doctor3} alt="Doctor 3" />
-                        <div className="doctor-info">
-                            <h4 className="doctor-name">Dr. Jennifer Davis</h4>
-                            <Button variant="doctor-sign-in" onClick={showModalLogin}>Sign In</Button>
-                        </div>
-                    </div>
-                </SwiperSlide>
+                )
+}
+
             </Swiper>
         </Container>
     );

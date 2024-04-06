@@ -6,9 +6,10 @@ import * as formik from 'formik';
 import * as yup from 'yup';
 import { getAppointmentById, getFreeSlots, saveAppointment, slot, TFreeSlotRequest, TFullDetailedAppointment, TPatientForAppointment, TSaveAppointment } from '../../../api/patientAppointmentsApi';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../../store/slices/userSlice';
 import AutocompleteInput from './AutocompleteInput';
+import { openModal, setErrorMessage } from '../../../store/slices/modalSlice';
 
 interface IEditAppointmentProps {
 
@@ -43,6 +44,7 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
     timeslots: yup.number().min(1).required()
   });
 
+  const dispatch = useDispatch();
   const today = new Date();
   today.setDate(today.getDate() + 1);
   const minDate = today.toISOString().slice(0, 10);
@@ -88,6 +90,8 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
 
     } catch (error) {
       console.log(error)
+      dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+      dispatch(openModal("error"));
     }
   }
 
@@ -121,6 +125,8 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
       setDodctorsSlots(detailedSlots);
     } catch (error) {
       console.log(error);
+      dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+      dispatch(openModal("error"));
     }
   }
 
