@@ -239,10 +239,12 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
           <h3 className='text-dark my-4'>Available timeslots:</h3>
           <div className='timeslot-radio' role="group" aria-labelledby="timeslots">
 
+{(doctorsSlots != null && doctorsSlots?.length != 0) ? (
 
-            {doctorsSlots?.map(slot =>
-
-              <Form.Check
+<>
+  {doctorsSlots?.map(slot =>
+    
+    <Form.Check
                 key={slot.id}
                 inline
                 defaultChecked={ (currentAppointment !==null && currentAppointment?.slotId.id === slot.id) ? true: undefined }
@@ -253,9 +255,14 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
                 id={`inline-radio-${slot.id}`}
                 value={slot.id}
                 onChange={handleChange}
-              />
-            )}
+                />
+              )}
+              
+                </>
+            ) : (
 
+<div className='empty-slots'>For getting slots please select a doctor from the above list.</div>
+            )}
 
           </div>
 

@@ -47,7 +47,10 @@ $theme-colors: ("white": #ffffff,
 
 .timeslot-radio {
 
-
+    min-height: 230px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 
     label {
 
@@ -64,7 +67,6 @@ $theme-colors: ("white": #ffffff,
             border-color: transparent;
         }
 
-
     }
 
     input[type="radio"] {
@@ -76,64 +78,72 @@ $theme-colors: ("white": #ffffff,
         color: map.get($theme-colors, "white");
         border-color: transparent;
 
-
     }
 
     input[disabled]+label {
         border: 2px solid map.get($theme-colors, "info");
     }
-
-
+    .empty-slots {
+        width: 100%;
+        text-align: center;
+        color: map.get($theme-colors, "primary");
+        font-size: 25px;
+        }
 }
 
 
-    .profile_photo {
-        position: relative;
-        margin: 15px 0;
-        &__file {
-            border: 1px solid map.get($theme-colors, "primary");
-            padding: 5px;
-            input{
-                display: none;
-            }
-            label{
-                cursor: pointer;
-                width: 100%;
-                display: block;
-                }
-            &__view{
-                border: 1px dashed map.get($theme-colors, "primary");
-                height: 200px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                img{
-                    
-                    height: 100%;
-                    width: auto;
-                    margin: 0 auto;
-                    }
-                
-                div{
-                    
-                    border: 1px double map.get($theme-colors, "primary");
-                    padding: 20px 30px;
-                    font-size: 30px;
-                    font-weight: bold;
-                    color: map.get($theme-colors, "primary");
-                    
-                    }
-                }
+.profile_photo {
+    position: relative;
+    margin: 15px 0;
 
+    &__file {
+        border: 1px solid map.get($theme-colors, "primary");
+        padding: 5px;
+
+        input {
+            display: none;
         }
 
-            button{
-       position: absolute;
-    right: 20px;
-    bottom: 20px;
-                }
+        label {
+            cursor: pointer;
+            width: 100%;
+            display: block;
+        }
+
+        &__view {
+            border: 1px dashed map.get($theme-colors, "primary");
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+
+                height: 100%;
+                width: auto;
+                margin: 0 auto;
+            }
+
+            div {
+
+                border: 1px double map.get($theme-colors, "primary");
+                padding: 20px 30px;
+                font-size: 30px;
+                font-weight: bold;
+                color: map.get($theme-colors, "primary");
+
+            }
+        }
 
     }
+
+    button {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+    }
+
+}
 
 .appcard {
 
@@ -185,9 +195,10 @@ $theme-colors: ("white": #ffffff,
     background: map.get($theme-colors, "light-grey");
     width: 338px;
 
-        &__header {
+    &__header {
         display: flex;
-justify-content: space-between;
+        justify-content: space-between;
+
         &__is_visited {
             padding: 2px 8px;
             display: inline-block;
@@ -197,59 +208,60 @@ justify-content: space-between;
 
     }
 
-            &__body {
+    &__body {
 
-                text-align: center;
-            }
-
-   &__footer {
-      
-                text-align: right;
-      
+        text-align: center;
     }
-    
+
+    &__footer {
+
+        text-align: right;
+
+    }
+
 }
+
 .appcard-banner {
-    background-image: url('assets/images/banner.png'); 
-    background-size: cover; 
-    background-position: center; 
-    height: 700px; 
-    border-radius: 10px; 
+    background-image: url('assets/images/banner.png');
+    background-size: cover;
+    background-position: center;
+    height: 700px;
+    border-radius: 10px;
     display: flex;
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    padding: 20px; 
-    color: white; 
-    font-size: 60px; 
-    font-weight: bold; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
 }
 
 .banner-content {
-    text-align: center; 
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
-    margin-bottom: 20px; 
-    font-size: 45px; 
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+    font-size: 45px;
 }
 
 .appcard-banner .btn {
-    background-color: map.get($theme-colors, "danger"); 
-    color: white; 
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
-    margin-top: 70px; 
-    align-self: flex-end; 
+    background-color: map.get($theme-colors, "danger");
+    color: white;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: 70px;
+    align-self: flex-end;
 }
 
 
 
-.text-end.p-3{
+.text-end.p-3 {
     text-align: right;
     padding: 1rem;
     color: map.get($theme-colors, "primary");
-    font-weight: bold; 
-  }
+    font-weight: bold;
+}
 
-  .main-page-testimonials {
+.main-page-testimonials {
     text-align: center;
 
     h2 {
@@ -274,10 +286,10 @@ justify-content: space-between;
 
         p {
             margin-bottom: 10px;
-            &:first-child
-                {
-                    font-style: italic;
-                    }
+
+            &:first-child {
+                font-style: italic;
+            }
         }
 
         .author {
@@ -288,12 +300,12 @@ justify-content: space-between;
 
     .text-danger {
         color: map.get($theme-colors, "danger");
-        font-size: 2em; 
+        font-size: 2em;
     }
 
     .text-primary {
         color: map.get($theme-colors, "primary");
-        font-size: 2em; 
+        font-size: 2em;
     }
 
     .btn-danger {
@@ -335,20 +347,20 @@ justify-content: space-between;
 
     img {
         margin-top: 50px;
-        max-width: 80%; 
+        max-width: 80%;
         height: auto;
         max-height: 312px;
         border-radius: 10px;
-        margin-bottom: 20px; 
+        margin-bottom: 20px;
     }
 
     .doctor-info {
-        margin-top: auto; 
+        margin-top: auto;
 
         .doctor-name {
             color: map.get($theme-colors, "primary");
             font-size: 1.5em;
-            margin-bottom: 10px; 
+            margin-bottom: 10px;
         }
 
         .btn-doctor-sign-in {
@@ -368,33 +380,22 @@ justify-content: space-between;
 
 }
 
-
-.img-doctor1, .img-doctor2, .img-doctor3 {
-    width: 100%;
-    height: auto;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: contain; 
+.dashboard-card {
+    min-height: 230px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.img-doctor1 {
-    background-image: url('assets/images/doctor1.png');
-}
-
-.img-doctor2 {
-    background-image: url('assets/images/doctor2.png');
-}
-
-.img-doctor3 {
-    background-image: url('assets/images/doctor3.png');
+.appointments-table {
+    min-height: 450px;
 }
 
 
-    .doctors-subheading {
-        font-weight: bold;
-        font-size: 35px; 
-        margin-bottom: 1 cm; 
-        color:map.get($theme-colors, "primary")
-    }
 
-
+.doctors-subheading {
+    font-weight: bold;
+    font-size: 35px;
+    margin-bottom: 1 cm;
+    color: map.get($theme-colors, "primary")
+}

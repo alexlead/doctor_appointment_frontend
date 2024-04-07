@@ -13,9 +13,9 @@ const MyAppointmentsTable: React.FunctionComponent<IMyAppointmentsTableProps> = 
 
   const today = Date.now();
   return (
-    <div className="">
+    <div className="appointments-table">
 
-      {appointments?.length && (
+      {(appointments?.length != 0) && (
 
         <Table size='lg' responsive striped bordered hover>
           <thead>
@@ -28,7 +28,7 @@ const MyAppointmentsTable: React.FunctionComponent<IMyAppointmentsTableProps> = 
           </thead>
           <tbody>
 
-            {appointments.map(appointment =>
+            {appointments?.map(appointment =>
 
               <tr key={appointment.id}>
                 <td>{appointment.date}</td>
