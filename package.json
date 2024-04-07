@@ -64,6 +64,7 @@
   "devDependencies": {
     "@types/redux-mock-store": "^1.0.6",
     "redux-mock-store": "^1.5.4",
+    "jest": "^27.5.1",
     "sass": "^1.72.0"
   }
 }
