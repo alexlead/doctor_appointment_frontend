@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import * as formik from 'formik';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { closeModal, openModal } from '../store/slices/modalSlice';
+import { closeModal, openModal, setErrorMessage } from '../store/slices/modalSlice';
 import { decodedUser, userRegistration, userRegistrationForm, userValues } from '../api/userAuthorisation';
 import { authenticatedAction, authorizedAction, setUserAction } from '../store/slices/userSlice';
 import { jwtDecode } from 'jwt-decode';
@@ -28,7 +28,7 @@ const RegistrationForm: React.FunctionComponent<IRegistrationFormProps> = () => 
         firstName: yup.string().min(2, 'must be at least 2 characters long').required(),
         lastName: yup.string().min(2, 'must be at least 2 characters long').required(),
         username: yup.string().email('Invalid email').matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, "Invalid email").required(),
-        password: yup.string().min(8, 'must be at least 8 characters long').max(30, 'too long password, maximum 30 characters long').required()
+        password: yup.string().trim().min(8, 'must be at least 8 characters long').max(20, 'too long password, maximum 30 characters long').matches(/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,20})/i).required()
     });
 
     const dispatch = useDispatch();
@@ -38,9 +38,9 @@ const RegistrationForm: React.FunctionComponent<IRegistrationFormProps> = () => 
         console.log(values)
 
         const credentials: userRegistrationForm = {
-            name: values.firstName,
-            surname: values.lastName,
-            username: values.username,
+            name: values.firstName.trim(),
+            surname: values.lastName.trim(),
+            username: values.username.trim(),
             password: values.password
         }
 
@@ -48,11 +48,9 @@ const RegistrationForm: React.FunctionComponent<IRegistrationFormProps> = () => 
 
             const res = await userRegistration(credentials)
             const data = await res.json();
-            console.log(res.status);
-            console.log(data);
 
-            if (res.status == 200) {
-
+            if ( res.status === 200) {
+                
                 localStorage.setItem('token', data.refreshToken);
                 localStorage.setItem('accessToken', data.accessToken);
 
@@ -70,17 +68,19 @@ const RegistrationForm: React.FunctionComponent<IRegistrationFormProps> = () => 
                 dispatch(authenticatedAction(data.accessToken))
                 dispatch(authorizedAction(user.roles[0].authority))
                 navigate("/dashboard")
+                dispatch(closeModal())
 
+            } else {
+
+                dispatch(setErrorMessage(data.message))
+                dispatch(openModal("error"))
             }
 
         } catch (error) {
-            console.log(error);
+            dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+            dispatch(openModal("error"));
         }
-
-
-        dispatch(closeModal())
     }
-
 
     return (
 
@@ -134,6 +134,10 @@ const RegistrationForm: React.FunctionComponent<IRegistrationFormProps> = () => 
                             onChange={handleChange}
                             isValid={touched.password && !errors.password}
                         />
+                        <Form.Text id="passwordHelpBlock" muted>
+        Your password must be 8-20 characters long, contain letters and numbers,
+        and must not contain spaces, special characters, or emoji.
+      </Form.Text>
                     </Form.Group>
 
                     <Button className='w-100  my-2' variant="danger" type="submit">

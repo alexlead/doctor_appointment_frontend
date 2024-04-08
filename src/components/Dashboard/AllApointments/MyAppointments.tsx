@@ -3,8 +3,9 @@ import MyAppointmentsPagination from './MyAppointmentsPagination';
 import MyAppointmentsTable from './MyAppointmentsTable';
 import MyAppointmentsFilters from './MyAppointmentsFilters';
 import { deleteAppointmentById, getPatientAppointmentByPeriod, TDetailedAppointment, TDetailedDoctorAppointment } from '../../../api/patientAppointmentsApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../../store/slices/userSlice';
+import { openModal, setErrorMessage } from '../../../store/slices/modalSlice';
 
 interface IMyAppointmentsProps {
 }
@@ -32,7 +33,7 @@ const MyAppointments: React.FunctionComponent<IMyAppointmentsProps> = (props) =>
   const [totalPages, setTotalPages] = useState<number>(0)
   const [page, setPage] = useState<number>(1);
 
-
+  const dispatch = useDispatch();
   const initFilters = () => {
 
 
@@ -83,6 +84,8 @@ const MyAppointments: React.FunctionComponent<IMyAppointmentsProps> = (props) =>
       getPageAppointments(1);
     } catch (error) {
       console.log(error);
+      dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+      dispatch(openModal("error"));
     }
   }
 
@@ -117,6 +120,8 @@ const MyAppointments: React.FunctionComponent<IMyAppointmentsProps> = (props) =>
 
     } catch (error) {
       console.log(error)
+      dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+      dispatch(openModal("error"));
     }
   }
 

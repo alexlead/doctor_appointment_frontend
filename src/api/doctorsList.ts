@@ -20,3 +20,16 @@ export async function getDoctors() {
   );
 
 }
+export async function getDoctorsWithPhoto() {
+
+
+  return await fetch(
+    `/api/users/doctorslist/`,
+    {
+      method: "GET",
+      headers: requestHeader
+
+    }
+  );
+
+}

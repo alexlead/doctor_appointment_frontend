@@ -7,10 +7,9 @@ import DashboardCommingAppointments from './view/DashboardCommingAppointments';
 import DashboardAllAppointments from './view/DashboardAllAppointments';
 import DashboardEditAppointment from './view/DashboardEditAppointment';
 import DashboardProfile from './view/DashboardProfile';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectUser } from './store/slices/userSlice';
 import { history } from './_helpers/history';
 import PrivateRoute from './components/PrivateRoute';
+import ErrorWindow from './components/ErrorWindow';
 
 function App() {
 
@@ -20,6 +19,7 @@ function App() {
 
   return (
     <div className="App">
+      <ErrorWindow />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/dashboard' element={

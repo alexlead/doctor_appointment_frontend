@@ -11,6 +11,21 @@ export type slot = {
   endTime: string;
 }
 
+export type TPatientForAppointment = {
+  patientId: {
+    id: number;
+    name: string;
+    surname: string;
+  }
+} 
+
+export type TDoctorForAppointment = {
+  doctorId: {
+    id: number;
+    name: string;
+    surname: string;
+  }
+}
 
 export type TPatientAppointment = {
   id: number;
@@ -19,13 +34,8 @@ export type TPatientAppointment = {
   slotId: number;
 }
 
-export type TDetailedAppointment = {
+export type TDetailedAppointment = TDoctorForAppointment & {
   id: number;
-  doctorId: {
-    id: number;
-    name: string;
-    surname: string;
-  },
   slotId: {
     id: number;
     startTime: string;
@@ -34,13 +44,8 @@ export type TDetailedAppointment = {
   date: string;
   visitComplete: boolean;
 }
-export type TDetailedDoctorAppointment = {
+export type TDetailedDoctorAppointment = TPatientForAppointment & {
   id: number;
-  patientId: {
-    id: number;
-    name: string;
-    surname: string;
-  },
   slotId: {
     id: number;
     startTime: string;
@@ -50,13 +55,7 @@ export type TDetailedDoctorAppointment = {
   visitComplete: boolean;
 }
 
-export type TFullDetailedAppointment = TDetailedAppointment & {
-  patientId: {
-    id: number;
-    name: string;
-    surname: string;
-  }
-};
+export type TFullDetailedAppointment = TDetailedAppointment & TPatientForAppointment
 
 export type TFreeSlotsByDate = {
   all: slot[];

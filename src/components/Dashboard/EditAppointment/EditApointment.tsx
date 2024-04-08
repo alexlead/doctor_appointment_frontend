@@ -4,8 +4,12 @@ import { doctor, getDoctors } from '../../../api/doctorsList';
 import * as formik from 'formik';
 
 import * as yup from 'yup';
-import { getAppointmentById, getFreeSlots, saveAppointment, slot, TFreeSlotRequest, TFullDetailedAppointment, TSaveAppointment } from '../../../api/patientAppointmentsApi';
+import { getAppointmentById, getFreeSlots, saveAppointment, slot, TFreeSlotRequest, TFullDetailedAppointment, TPatientForAppointment, TSaveAppointment } from '../../../api/patientAppointmentsApi';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from '../../../store/slices/userSlice';
+import AutocompleteInput from './AutocompleteInput';
+import { openModal, setErrorMessage } from '../../../store/slices/modalSlice';
 
 interface IEditAppointmentProps {
 
@@ -32,7 +36,7 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
   const navigate = useNavigate();
 
   const { Formik } = formik;
-
+  const { permissions } = useSelector(selectUser);
 
   const schema = yup.object().shape({
     appointmentDate: yup.string().required(),
@@ -40,6 +44,7 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
     timeslots: yup.number().min(1).required()
   });
 
+  const dispatch = useDispatch();
   const today = new Date();
   today.setDate(today.getDate() + 1);
   const minDate = today.toISOString().slice(0, 10);
@@ -51,6 +56,7 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
   const [doctors, setDoctors] = useState<doctor[] | null>(null);
   const [doctorsSlots, setDodctorsSlots] = useState<TSlotOptions[] | null>(null);
   const [currentAppointment, setCurrentAppointment] = useState<TFullDetailedAppointment | null>(null);
+  const [patient, setPatient] = useState<TPatientForAppointment | null>(null)
 
   const getDoctorsList = async () => {
     try {
@@ -78,12 +84,14 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
 
 
       setBlockByDate ( Date.parse(data.date) < (Date.now()) );
-
+      setPatient(data)
       setCurrentAppointment(data);
 
 
     } catch (error) {
       console.log(error)
+      dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+      dispatch(openModal("error"));
     }
   }
 
@@ -117,6 +125,8 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
       setDodctorsSlots(detailedSlots);
     } catch (error) {
       console.log(error);
+      dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+      dispatch(openModal("error"));
     }
   }
 
@@ -150,10 +160,6 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
     getDoctorsSlots(freeSlotRequest);
   }
 
-
-  
-
-
   const handleSubmitForm = async (values: IAppointmentValues) => {
     console.log(values);
     const payload: TSaveAppointment = {
@@ -167,8 +173,9 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
 
     navigate("/dashboard/myappointments");
 
-
   }
+
+
 
   return (
 
@@ -203,7 +210,6 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
             max={maxDate}
             value={values.appointmentDate}
             onChange={(e) => { handleChange(e); handleChangedDate(values, e) }}
-            // onChange={handleChange}
             placeholder="Date of Appointment" />
           <h3 className='text-dark my-4'>Doctor:</h3>
           <Form.Select aria-label="Default select example"
@@ -221,14 +227,24 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
             }
           </Form.Select>
 
+          {permissions === "ROLE_DOCTOR" &&
+            <div className="patient-selector">
+                <h3 className='text-dark my-4'>Patient:</h3>
+                <AutocompleteInput patient={patient}/>
+
+            </div>
+          }
+
 
           <h3 className='text-dark my-4'>Available timeslots:</h3>
           <div className='timeslot-radio' role="group" aria-labelledby="timeslots">
 
+{(doctorsSlots != null && doctorsSlots?.length != 0) ? (
 
-            {doctorsSlots?.map(slot =>
-
-              <Form.Check
+<>
+  {doctorsSlots?.map(slot =>
+    
+    <Form.Check
                 key={slot.id}
                 inline
                 defaultChecked={ (currentAppointment !==null && currentAppointment?.slotId.id === slot.id) ? true: undefined }
@@ -239,9 +255,14 @@ const EditAppointment: React.FunctionComponent<IEditAppointmentProps> = (props) 
                 id={`inline-radio-${slot.id}`}
                 value={slot.id}
                 onChange={handleChange}
-              />
-            )}
+                />
+              )}
+              
+                </>
+            ) : (
 
+<div className='empty-slots'>For getting slots please select a doctor from the above list.</div>
+            )}
 
           </div>
 

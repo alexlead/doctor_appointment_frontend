@@ -3,6 +3,7 @@ import logo from '../../assets/images/logo.png'
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { authenticatedAction, authorizedAction } from '../../store/slices/userSlice';
+import { userLogout } from '../../api/userAuthorisation';
 interface IDashboardSidebarProps {
 }
 
@@ -10,7 +11,15 @@ const DashboardSidebar: React.FunctionComponent<IDashboardSidebarProps> = (props
 
     const dispatch = useDispatch();
 
-    const logout = () => {
+    const logout = async () => {
+
+        try{ 
+            await userLogout()
+        } catch (error) {
+            console.log(error)
+        }
+
+        localStorage.clear();
         dispatch(authenticatedAction(null))
         dispatch(authorizedAction(null))
 

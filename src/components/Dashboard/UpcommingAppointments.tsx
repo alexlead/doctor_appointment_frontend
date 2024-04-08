@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import UpcommingAppointmentCard from './UpcommingAppointmentCard';
 import { Container, Row, Col } from 'react-bootstrap';
 import { getPatientFutureAppointment, TDetailedAppointment, TDetailedDoctorAppointment } from '../../api/patientAppointmentsApi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../store/slices/userSlice';
 import { doctor } from '../../api/doctorsList';
+import { openModal, setErrorMessage } from '../../store/slices/modalSlice';
 
 interface IUpcommingAppointmentsProps {
 }
 
 const UpcommingAppointments: React.FunctionComponent<IUpcommingAppointmentsProps> = (props) => {
 
+  const dispatch = useDispatch();
   const { permissions } = useSelector(selectUser);
-
   const [appointments, setAppointments] = useState<TDetailedAppointment[] | null>(null);
   const [doctorAppointments, setDoctorAppointments] = useState<TDetailedDoctorAppointment[] | null>(null);
 
@@ -31,6 +32,8 @@ const UpcommingAppointments: React.FunctionComponent<IUpcommingAppointmentsProps
 
     } catch (error) {
       console.log(error);
+      dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
+      dispatch(openModal("error"));
     }
   }
 
@@ -45,14 +48,14 @@ const UpcommingAppointments: React.FunctionComponent<IUpcommingAppointmentsProps
       <h2 className='text-primary my-4'>Upcoming Appointments</h2>
       <div className="container">
         <div className="row">
-          <div className="col-8">
+          <div className="col-8 dashboard-card">
             {appointments?.length && <>
               {appointments.map(appointment => <UpcommingAppointmentCard appointment={appointment} doctorAppointment={null} key={appointment.id} />)}
             </>
 
             }
             {doctorAppointments?.length && <>
-              {doctorAppointments.map(doctorAppointment => <UpcommingAppointmentCard appointment={null} doctorAppointment={doctorAppointment} key={doctorAppointment.id} />)}
+              {doctorAppointments?.map(doctorAppointment => <UpcommingAppointmentCard appointment={null} doctorAppointment={doctorAppointment} key={doctorAppointment.id} />)}
             </>
             }
             {(!appointments?.length && !doctorAppointments?.length) &&
