@@ -78,8 +78,6 @@ const ProfileForm: React.FunctionComponent<IProfileFormProps> = (props) => {
 
         } catch (error) {
             console.log(error);
-            dispatch(setErrorMessage("Connection error. Please try again few minutes later."));
-            dispatch(openModal("error"));
         }
     }
 
